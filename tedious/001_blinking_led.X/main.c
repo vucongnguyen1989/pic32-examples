@@ -1,9 +1,5 @@
-/* 
- * File:   main.c
- * Author: Yuri Panchul
- *
- * Created on August 30, 2012, 3:42 PM
- */
+//  File:   main.c
+//  Author: Yuri Panchul
 
 #include <p32xxxx.h>
 
@@ -23,7 +19,7 @@ void main (void)
 
     for (;;)
     {
-        /* Output uses LAT register */
+        // Output uses LAT register
 
         LATE = 0;
 
@@ -43,7 +39,7 @@ void main (void)
 
         LATE = 0;
 
-        /* Output uses PORT register */
+        // Output uses PORT register
 
         PORTE = 1;
 
@@ -55,7 +51,7 @@ void main (void)
 
         PORTE = 0;
 
-        /* Output uses PORTxSET, PORTxCLR and PORTxINV registers */
+        // Output uses PORTxSET, PORTxCLR and PORTxINV registers
 
         for (i = 0; i < 4; i++)
         {
