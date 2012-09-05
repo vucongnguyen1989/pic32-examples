@@ -8,17 +8,17 @@ void delay (int n)
     n *= 10000;
 
     while (n --)
-        asm ("nop");
+        asm volatile ("nop");
 }
 
 void main (void)
 {
     int i;
 
-    TRISE = 0;
-
     for (;;)
     {
+        TRISE = 0;
+
         // Output uses LAT register
 
         LATE = 0;
@@ -73,6 +73,34 @@ void main (void)
             delay (1);
             PORTEINV = 1 << i;
         }
+
+        PORTE = 0x33;
+
+        for (i = 0; i < 32; i++)
+        {
+            int temp;
+
+            delay (1);
+
+            temp          = PORTEbits.RE0;
+            PORTEbits.RE0 = PORTEbits.RE1;
+            PORTEbits.RE1 = PORTEbits.RE2;
+            PORTEbits.RE2 = PORTEbits.RE3;
+            PORTEbits.RE3 = PORTEbits.RE4;
+            PORTEbits.RE4 = PORTEbits.RE5;
+            PORTEbits.RE5 = PORTEbits.RE6;
+            PORTEbits.RE6 = PORTEbits.RE7;
+            PORTEbits.RE7 = temp;
+        }
+
+        delay (1); TRISEbits.TRISE0 = 1;
+        delay (1); TRISEbits.TRISE1 = 1;
+        delay (1); TRISEbits.TRISE2 = 1;
+        delay (1); TRISEbits.TRISE3 = 1;
+        delay (1); TRISEbits.TRISE4 = 1;
+        delay (1); TRISEbits.TRISE5 = 1;
+        delay (1); TRISEbits.TRISE6 = 1;
+        delay (1); TRISEbits.TRISE7 = 1;
     }
 }
 
