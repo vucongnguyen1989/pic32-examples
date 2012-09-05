@@ -31,63 +31,72 @@ void delay (int n)
  *
  */
 
+#define pin_a    PORTFbits.RF3
+#define pin_b    PORTDbits.RD1
+#define pin_c    PORTDbits.RD6
+#define pin_d    PORTFbits.RF6
+#define pin_e    PORTFbits.RF4
+#define pin_f    PORTDbits.RD8
+#define pin_g    PORTDbits.RD11
+#define pin_dp   PORTDbits.RD7
+
+#define digit_1  PORTFbits.RF2
+#define digit_2  PORTDbits.RD0
+#define digit_3  PORTFbits.RF1
+#define digit_4  PORTDbits.RD5
+
+#define tris_pin_a    TRISFbits.TRISF3
+#define tris_pin_b    TRISDbits.TRISD1
+#define tris_pin_c    TRISDbits.TRISD6
+#define tris_pin_d    TRISFbits.TRISF6
+#define tris_pin_e    TRISFbits.TRISF4
+#define tris_pin_f    TRISDbits.TRISD8
+#define tris_pin_g    TRISDbits.TRISD11
+#define tris_pin_dp   TRISDbits.TRISD7
+
+#define tris_digit_1  TRISFbits.TRISF2
+#define tris_digit_2  TRISDbits.TRISD0
+#define tris_digit_3  TRISFbits.TRISF1
+#define tris_digit_4  TRISDbits.TRISD5
+
 void setup_display_abcdef_dp ()
 {
-    TRISDCLR = (  1 << 11) | (  1 << 8) | (   1 << 7) | (  1 << 6) | (  1 << 1);
-    TRISFCLR = (  1 <<  6) | (  1 << 4) | (   1 << 3);
+    tris_pin_a  = 0;
+    tris_pin_b  = 0;
+    tris_pin_c  = 0;
+    tris_pin_d  = 0;
+    tris_pin_e  = 0;
+    tris_pin_f  = 0;
+    tris_pin_g  = 0;
+    tris_pin_dp = 0;
 }
 
 void display_abcdef_dp (int a, int b, int c, int d, int e, int f, int g, int dp)
 {
-    PORTDCLR = (! g << 11) | (! f << 8) | (! dp << 7) | (! c << 6) | (! b << 1);
-    PORTFCLR = (! d <<  6) | (! e << 4) | (!  a << 3);
-
-    PORTDSET = (  g << 11) | (  f << 8) | (  dp << 7) | (  c << 6) | (  b << 1);
-    PORTFSET = (  d <<  6) | (  e << 4) | (   a << 3);
+    pin_a  = a;
+    pin_b  = b;
+    pin_c  = c;
+    pin_d  = d;
+    pin_e  = e;
+    pin_f  = f;
+    pin_g  = g;
+    pin_dp = dp;
 }
 
 void setup_set_digit ()
 {
-    TRISDCLR = (1 << 5) |  1;
-    TRISFCLR = (1 << 2) | (1 << 1);
+    tris_digit_1 = 0;
+    tris_digit_2 = 0;
+    tris_digit_3 = 0;
+    tris_digit_4 = 0;
 }
 
 void set_digit (int digit)
 {
-    switch (digit)
-    {
-        case 1:
-
-            PORTFCLR = 1 << 2;
-            PORTFSET = 1 << 1;
-            PORTDSET = (1 << 5) | 1;
-
-            break;
-
-        case 2:
-
-            PORTDCLR = 1;
-            PORTDSET = 1 << 5;
-            PORTFSET = (1 << 2) | (1 << 1);
-
-            break;
-
-        case 3:
-
-            PORTFCLR = 1 << 1;
-            PORTFSET = 1 << 2;
-            PORTDSET = (1 << 5) | 1;
-
-            break;
-
-        case 4:
-
-            PORTDCLR = 1 << 5;
-            PORTDSET = 1;
-            PORTFSET = (1 << 2) | (1 << 1);
-
-            break;
-    }
+    digit_1 = digit != 1;
+    digit_2 = digit != 2;
+    digit_3 = digit != 3;
+    digit_4 = digit != 4;
 }
 
 void display_digit (int n)
