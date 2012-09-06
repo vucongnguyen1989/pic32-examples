@@ -10,9 +10,9 @@ CND_CONF=default
 CND_DISTDIR=dist
 TMPDIR=build/${CND_CONF}/${IMAGE_TYPE}/tmp-packaging
 TMPDIRNAME=tmp-packaging
-OUTPUT_PATH=dist/${CND_CONF}/${IMAGE_TYPE}/004_buttons_and_switches.${IMAGE_TYPE}.${OUTPUT_SUFFIX}
-OUTPUT_BASENAME=004_buttons_and_switches.${IMAGE_TYPE}.${OUTPUT_SUFFIX}
-PACKAGE_TOP_DIR=004buttonsandswitches/
+OUTPUT_PATH=dist/${CND_CONF}/${IMAGE_TYPE}/005_buttons_and_switches.X.${IMAGE_TYPE}.${OUTPUT_SUFFIX}
+OUTPUT_BASENAME=005_buttons_and_switches.X.${IMAGE_TYPE}.${OUTPUT_SUFFIX}
+PACKAGE_TOP_DIR=005buttonsandswitches.x/
 
 # Functions
 function checkReturnCode
@@ -57,15 +57,15 @@ mkdir -p ${TMPDIR}
 
 # Copy files and create directories and links
 cd "${TOP}"
-makeDirectory ${TMPDIR}/004buttonsandswitches/bin
+makeDirectory ${TMPDIR}/005buttonsandswitches.x/bin
 copyFileToTmpDir "${OUTPUT_PATH}" "${TMPDIR}/${PACKAGE_TOP_DIR}bin/${OUTPUT_BASENAME}" 0755
 
 
 # Generate tar file
 cd "${TOP}"
-rm -f ${CND_DISTDIR}/${CND_CONF}/package/004buttonsandswitches.tar
+rm -f ${CND_DISTDIR}/${CND_CONF}/package/005buttonsandswitches.x.tar
 cd ${TMPDIR}
-tar -vcf ../../../../${CND_DISTDIR}/${CND_CONF}/package/004buttonsandswitches.tar *
+tar -vcf ../../../../${CND_DISTDIR}/${CND_CONF}/package/005buttonsandswitches.x.tar *
 checkReturnCode
 
 # Cleanup
