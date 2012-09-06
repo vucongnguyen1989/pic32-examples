@@ -3,8 +3,8 @@
     <type>com.microchip.mplab.nbide.embedded.makeproject</type>
     <configuration>
         <data xmlns="http://www.netbeans.org/ns/make-project/1">
-            <name>003_4_digit_7_segment_display_2</name>
-            <creation-uuid>53140f81-ca4f-4ff2-910b-12c36cf8e968</creation-uuid>
+            <name>005_buttons_and_switches</name>
+            <creation-uuid>fe3b8e9f-c9de-4ba2-9f58-1dc926e14958</creation-uuid>
             <make-project-type>0</make-project-type>
             <c-extensions>c</c-extensions>
             <cpp-extensions/>

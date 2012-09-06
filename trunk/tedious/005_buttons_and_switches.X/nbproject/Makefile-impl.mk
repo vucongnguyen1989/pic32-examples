@@ -24,7 +24,7 @@ CLEAN_SUBPROJECTS=${CLEAN_SUBPROJECTS_${SUBPROJECTS}}
 
 
 # Project Name
-PROJECTNAME=004_buttons_and_switches
+PROJECTNAME=005_buttons_and_switches.X
 
 # Active Configuration
 DEFAULTCONF=default

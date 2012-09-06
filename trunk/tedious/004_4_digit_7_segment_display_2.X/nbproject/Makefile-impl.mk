@@ -24,7 +24,7 @@ CLEAN_SUBPROJECTS=${CLEAN_SUBPROJECTS_${SUBPROJECTS}}
 
 
 # Project Name
-PROJECTNAME=003_4_digit_7_segment_display_2.X
+PROJECTNAME=004_4_digit_7_segment_display_2.X
 
 # Active Configuration
 DEFAULTCONF=default
