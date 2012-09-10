@@ -9,6 +9,6 @@ module de0_nano
 );
 
 
-    top top (clock, port_e, port_f, port_d, display, leds);
+    top1 top (clock, port_e, port_f, port_d, display, leds);
 
 endmodule
