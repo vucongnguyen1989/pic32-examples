@@ -49,6 +49,15 @@ void main (void)
     TRISE = 0;
     PORTE = 0xff;
 
+    // Reset
+
+    TRISF = 0;
+
+    for (i = 0; i < 16; i ++)
+        PORTF = 0;
+
+    PORTF = 0xff;
+
     for (;;)
     for (i = 0; i < 16; i ++)
     {
