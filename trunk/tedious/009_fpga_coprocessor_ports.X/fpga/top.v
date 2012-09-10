@@ -1,4 +1,4 @@
-module top1
+module top
 (
     input             clock,
     input      [7: 0] port_e,
