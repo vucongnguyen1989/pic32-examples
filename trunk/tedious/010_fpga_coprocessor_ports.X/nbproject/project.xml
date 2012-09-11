@@ -6,7 +6,7 @@
             <name>010_fpga_coprocessor_ports</name>
             <creation-uuid>23822a13-87cb-49c3-acf3-669aa2990209</creation-uuid>
             <make-project-type>0</make-project-type>
-            <c-extensions/>
+            <c-extensions>c</c-extensions>
             <cpp-extensions/>
             <header-extensions/>
             <sourceEncoding>ISO-8859-1</sourceEncoding>

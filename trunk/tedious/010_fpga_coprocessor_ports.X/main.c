@@ -93,13 +93,7 @@ void fpga_init (void)
 
 uint calculate_expected_result (uint n)
 {
-    uint r;
-
-    r = (n & 0x55) + ((n >> 1) & 0x55);
-    r = (r & 0x33) + ((r >> 2) & 0x33);
-    r = (r & 0x0F) + ((r >> 4) & 0x0F);
-
-    return r;
+    return ((n >> 4) & 0xC) | (n & 0x3);
 }
 
 void output_result
@@ -146,6 +140,7 @@ void run (void)
         asm volatile ("nop; nop");
         r = PORTD & 0xF;
         output_result (2, n, r);
+        }
 
         PORTE = n;
         asm volatile ("nop; nop; nop");
@@ -156,7 +151,6 @@ void run (void)
         asm volatile ("nop; nop; nop; nop");
         r = PORTD & 0xF;
         output_result (4, n, r);
-        }
 
         PORTE = n;
         asm volatile ("nop; nop; nop; nop; nop");
