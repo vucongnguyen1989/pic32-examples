@@ -3,81 +3,15 @@ module top
     input         clock,
     input  [7: 0] port_e,
     input  [7: 5] port_d_in,
-    output reg [3: 0] port_d_out,
+    output [3: 0] port_d_out,
     output [1:12] display,
     output [7: 0] leds
 );
 
 wire reset_n = port_d_in [5];
 
-/*
-wire run     = port_d_in [6];
-
 reg [7:0] data;
-reg tag;
-*/
-
-/*
-// Idea 1: Use run as a clock
-
-always @(posedge run or negedge reset_n)
-begin
-    if (! reset_n)
-    begin
-        data <= 0;
-        tag  <= 0;
-    end
-    else
-    begin
-        data <= port_e;
-        tag  <= ! tag;
-    end
-end
-*/
-
-/*
-// Idea 2: Variation - use run as a clock, add two registers
-
-reg [7:0] data_1, data_2;
-reg tag_1, tag_2;
-
-always @(posedge run or negedge reset_n)
-begin
-    if (! reset_n)
-    begin
-        data_1 <= 0;
-        tag_1  <= 0;
-    end
-    else
-    begin
-        data_1 <= port_e;
-        tag_1  <= ! tag;
-    end
-end
-
-always @(posedge clock or negedge reset_n)
-begin
-    if (! reset_n)
-    begin
-        data_2 <= 0;
-        tag_2  <= 0;
-
-        data   <= 0;
-        tag    <= 0;
-    end
-    else
-    begin
-        data_2 <= data_1;
-        tag_2  <= tag_1;
-
-        data   <= data_2;
-        tag    <= tag_2;
-    end
-end
-*/
-
-/*
-// Idea 3: Use run as enable; use additional input as a tag
+reg       tag;
 
 always @(posedge clock or negedge reset_n)
 begin
@@ -89,7 +23,7 @@ begin
     else
     begin
         data <= port_e;
-        tag  <= port_d_in [7];
+        tag  <= port_d_in [6];
     end
 end
 
@@ -109,34 +43,21 @@ reg [7:0] r_mul_result;
 reg [1:0] r_state;
 reg       r_first_tag;
 reg       r_prev_tag;
+reg [3:0] r_result;
 
-reg [1:0] state;
+reg [2:0] state;
 reg       first_tag;
 reg       prev_tag;
+reg [3:0] result;
 
-// assign port_d_out = r_mul_result;
-// assign port_d_out = r_state;
-// assign port_d_out = { r_first_tag, r_prev_tag };
-*/
+assign port_d_out = r_result;
 
-/*
-always @(posedge clock or negedge reset_n)
-    if (! reset_n)
-        port_d_out <= 0;
-    else
-        port_d_out <= port_f [3];
-*/
-
-always @(posedge clock)
-    port_d_out <= port_d_in;
-
-/*		  
-		  
 always @(*)
 begin
     state      = r_state;
     first_tag  = r_first_tag;
     prev_tag   = r_prev_tag;
+    result     = r_result;
 
     add_a      = 0;
     add_b      = 0;
@@ -169,6 +90,12 @@ begin
             mul_a      = r_add_result;
             mul_b      = r_add_result;
 
+            state      = 3;
+        end
+		  
+    3:
+        begin
+            result     = r_mul_result;
             state      = 0;
         end
     endcase
@@ -184,6 +111,8 @@ begin
         r_state       <= 0;
         r_first_tag   <= 1;
         r_prev_tag    <= 0;
+
+		  r_result      <= 0;
     end
     else
     begin
@@ -193,8 +122,9 @@ begin
         r_state       <= state;
         r_first_tag   <= first_tag;
         r_prev_tag    <= prev_tag;
+
+		  r_result      <= result;
     end
 end
-*/
 
 endmodule

@@ -15,7 +15,7 @@ typedef unsigned char uchar;
 //
 
 #pragma config FPLLMUL = MUL_20, FPLLIDIV = DIV_2, FPLLODIV = DIV_1, FWDTEN = OFF
-#pragma config POSCMOD = HS, FNOSC = PRIPLL, FPBDIV = DIV_1
+#pragma config POSCMOD = HS, FNOSC = PRIPLL, FPBDIV = DIV_8
 
 void running_fast ()
 {
@@ -34,7 +34,7 @@ void uart_init (void)
 {
     U1STAbits.UTXEN = 1;   // enable transmit pin
     U1STAbits.URXEN = 1;   // enable receive pin
-    U1BRG           = 80 * 1000000 / 16 / 115200 - 1;  // 80 MHz, 115.2K baud
+    U1BRG           = 10 * 1000000 / 16 / 9600 - 1;  // 10 MHz, 9600 baud
     U1MODEbits.ON   = 1;   // enable UART
 }
 
@@ -96,7 +96,7 @@ void fpga_init (void)
 uint calculate_expected_result (uint n)
 {
     n = (n * n) + 3;
-    return (n * n) & 0xFF;
+    return (n * n) & 0xF;
 }
 
 void output_result
@@ -160,8 +160,10 @@ void run (void)
         PORTD = PORTD_NO_RESET | (n & 1 ? 0 : PORTD_TAG);
         asm volatile ("nop; nop; nop; nop; nop");
         asm volatile ("nop; nop; nop; nop; nop");
-        asm volatile ("nop; nop; nop; nop; nop");
-        asm volatile ("nop; nop; nop; nop; nop");
+        asm volatile ("nop; ");
+//        asm volatile ("nop; nop; nop; nop; nop");
+//        asm volatile ("nop; nop; nop; nop; nop");
+//        asm volatile ("nop; nop; nop; nop; nop");
         r = PORTD & 0xF;
         output_result (5, n, r);
     }
