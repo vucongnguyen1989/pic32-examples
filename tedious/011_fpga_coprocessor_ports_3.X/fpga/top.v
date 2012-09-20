@@ -2,16 +2,16 @@ module top
 (
     input         clock,
     input  [7: 0] port_e,
-    input  [4: 1] port_f,
-    output reg [3: 0] port_d,
+    input  [7: 5] port_d_in,
+    output reg [3: 0] port_d_out,
     output [1:12] display,
     output [7: 0] leds
 );
 
-wire reset_n = port_f [1];
+wire reset_n = port_d_in [5];
 
 /*
-wire run     = port_f [2];
+wire run     = port_d_in [6];
 
 reg [7:0] data;
 reg tag;
@@ -89,7 +89,7 @@ begin
     else
     begin
         data <= port_e;
-        tag  <= port_f [3];
+        tag  <= port_d_in [7];
     end
 end
 
@@ -114,21 +114,21 @@ reg [1:0] state;
 reg       first_tag;
 reg       prev_tag;
 
-// assign port_d = r_mul_result;
-// assign port_d = r_state;
-// assign port_d = port_f; // { r_first_tag, r_prev_tag };
+// assign port_d_out = r_mul_result;
+// assign port_d_out = r_state;
+// assign port_d_out = { r_first_tag, r_prev_tag };
 */
 
 /*
 always @(posedge clock or negedge reset_n)
     if (! reset_n)
-        port_d <= 0;
+        port_d_out <= 0;
     else
-        port_d <= port_f [3];
+        port_d_out <= port_f [3];
 */
 
 always @(posedge clock)
-    port_d <= port_f [3];
+    port_d_out <= port_d_in;
 
 /*		  
 		  
