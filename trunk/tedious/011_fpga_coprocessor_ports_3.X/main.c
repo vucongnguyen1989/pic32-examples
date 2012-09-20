@@ -67,9 +67,8 @@ void uart_putn (uchar n)
     uart_putc ('0' + n % 10);
 }
 
-#define PORTF_NO_RESET      0x02
-#define PORTF_RUN           0x04
-#define PORTF_TAG           0x08
+#define PORTD_NO_RESET      0x20
+#define PORTD_TAG           0x40
 
 void fpga_init (void)
 {
@@ -77,19 +76,18 @@ void fpga_init (void)
 
     AD1PCFG = ~0;
 
-    TRISE =   0;  // PORT E is an output
-    TRISF =   0;  // PORT F is an output
-    TRISD = ~ 0;  // PORT D is an input
+    TRISE = 0x00;  // PORT E is an output
+    TRISD = 0x1F;  // PORT D [7:5] - output, [3:0] - input
 
     for (i = 0; i < 1000; i++)
         asm volatile ("nop");
 
-    PORTF = ~ PORTF_NO_RESET;
+    PORTD = ~ PORTD_NO_RESET;
 
     for (i = 0; i < 1000; i++)
         asm volatile ("nop");
 
-    PORTF = PORTF_NO_RESET;  // remove reset
+    PORTD = PORTD_NO_RESET;
 
     for (i = 0; i < 1000; i++)
         asm volatile ("nop");
@@ -159,7 +157,7 @@ void run (void)
         }
 
         PORTE = n;
-        PORTF = PORTF_NO_RESET; // PORTF_NO_RESET | PORTF_RUN | (n & 1 ? 0 : PORTF_TAG);
+        PORTD = PORTD_NO_RESET | (n & 1 ? 0 : PORTD_TAG);
         asm volatile ("nop; nop; nop; nop; nop");
         asm volatile ("nop; nop; nop; nop; nop");
         asm volatile ("nop; nop; nop; nop; nop");
