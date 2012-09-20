@@ -3,12 +3,12 @@
     <type>com.microchip.mplab.nbide.embedded.makeproject</type>
     <configuration>
         <data xmlns="http://www.netbeans.org/ns/make-project/1">
-            <name>011_fpga_coprocessor_ports_3</name>
-            <creation-uuid>53b00b07-48ae-4e12-861c-04dd4383cb10</creation-uuid>
+            <name>012_various_clocks</name>
+            <creation-uuid>bedbb642-8389-4112-bd18-28120e71e9a3</creation-uuid>
             <make-project-type>0</make-project-type>
             <c-extensions>c</c-extensions>
             <cpp-extensions/>
-            <header-extensions/>
+            <header-extensions>h</header-extensions>
             <sourceEncoding>ISO-8859-1</sourceEncoding>
             <make-dep-projects/>
         </data>

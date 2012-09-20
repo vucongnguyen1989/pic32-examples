@@ -3,16 +3,19 @@ module top
     input         clock,
     input  [7: 0] port_e,
     input  [4: 1] port_f,
-    output [3: 0] port_d,
+    output reg [3: 0] port_d,
     output [1:12] display,
     output [7: 0] leds
 );
 
 wire reset_n = port_f [1];
+
+/*
 wire run     = port_f [2];
 
 reg [7:0] data;
 reg tag;
+*/
 
 /*
 // Idea 1: Use run as a clock
@@ -32,6 +35,7 @@ begin
 end
 */
 
+/*
 // Idea 2: Variation - use run as a clock, add two registers
 
 reg [7:0] data_1, data_2;
@@ -70,6 +74,7 @@ begin
         tag    <= tag_2;
     end
 end
+*/
 
 /*
 // Idea 3: Use run as enable; use additional input as a tag
@@ -87,7 +92,6 @@ begin
         tag  <= port_f [3];
     end
 end
-*/
 
 // Datapath
 
@@ -102,8 +106,6 @@ wire [7:0] mul_result = mul_a * mul_b;
 reg [7:0] r_add_result;
 reg [7:0] r_mul_result;
 
-assign port_d = r_mul_result;
-
 reg [1:0] r_state;
 reg       r_first_tag;
 reg       r_prev_tag;
@@ -112,6 +114,24 @@ reg [1:0] state;
 reg       first_tag;
 reg       prev_tag;
 
+// assign port_d = r_mul_result;
+// assign port_d = r_state;
+// assign port_d = port_f; // { r_first_tag, r_prev_tag };
+*/
+
+/*
+always @(posedge clock or negedge reset_n)
+    if (! reset_n)
+        port_d <= 0;
+    else
+        port_d <= port_f [3];
+*/
+
+always @(posedge clock)
+    port_d <= port_f [3];
+
+/*		  
+		  
 always @(*)
 begin
     state      = r_state;
@@ -151,6 +171,7 @@ begin
 
             state      = 0;
         end
+    endcase
 end
 
 always @(posedge clock or negedge reset_n)
@@ -174,5 +195,6 @@ begin
         r_prev_tag    <= prev_tag;
     end
 end
+*/
 
 endmodule

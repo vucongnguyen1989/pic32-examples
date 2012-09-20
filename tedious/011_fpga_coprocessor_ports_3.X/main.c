@@ -13,6 +13,7 @@ typedef unsigned char uchar;
 // WDT OFF
 // Other options are don't care
 //
+
 #pragma config FPLLMUL = MUL_20, FPLLIDIV = DIV_2, FPLLODIV = DIV_1, FWDTEN = OFF
 #pragma config POSCMOD = HS, FNOSC = PRIPLL, FPBDIV = DIV_1
 
@@ -66,12 +67,15 @@ void uart_putn (uchar n)
     uart_putc ('0' + n % 10);
 }
 
-#define PORTF_RESET         0x02
-#define PORTF_INPUT_STROBE  0x04
+#define PORTF_NO_RESET      0x02
+#define PORTF_RUN           0x04
+#define PORTF_TAG           0x08
 
 void fpga_init (void)
 {
     int i;
+
+    AD1PCFG = ~0;
 
     TRISE =   0;  // PORT E is an output
     TRISF =   0;  // PORT F is an output
@@ -80,12 +84,12 @@ void fpga_init (void)
     for (i = 0; i < 1000; i++)
         asm volatile ("nop");
 
-    PORTF = ~ PORTF_RESET;
+    PORTF = ~ PORTF_NO_RESET;
 
     for (i = 0; i < 1000; i++)
         asm volatile ("nop");
 
-    PORTF = PORTF_RESET;  // remove reset
+    PORTF = PORTF_NO_RESET;  // remove reset
 
     for (i = 0; i < 1000; i++)
         asm volatile ("nop");
@@ -93,7 +97,8 @@ void fpga_init (void)
 
 uint calculate_expected_result (uint n)
 {
-    return ((n >> 4) & 0xC) | (n & 0x3);
+    n = (n * n) + 3;
+    return (n * n) & 0xFF;
 }
 
 void output_result
@@ -127,7 +132,7 @@ void run (void)
 
     for (n = 0; n < 256; n++)
     {
-        if (1) {
+        if (0) {
         PORTE = n;
         r = PORTD & 0xF;
         output_result (0, n, r);
@@ -141,7 +146,6 @@ void run (void)
         asm volatile ("nop; nop");
         r = PORTD & 0xF;
         output_result (2, n, r);
-        }
 
         PORTE = n;
         asm volatile ("nop; nop; nop");
@@ -152,16 +156,16 @@ void run (void)
         asm volatile ("nop; nop; nop; nop");
         r = PORTD & 0xF;
         output_result (4, n, r);
+        }
 
         PORTE = n;
+        PORTF = PORTF_NO_RESET; // PORTF_NO_RESET | PORTF_RUN | (n & 1 ? 0 : PORTF_TAG);
+        asm volatile ("nop; nop; nop; nop; nop");
+        asm volatile ("nop; nop; nop; nop; nop");
+        asm volatile ("nop; nop; nop; nop; nop");
         asm volatile ("nop; nop; nop; nop; nop");
         r = PORTD & 0xF;
         output_result (5, n, r);
-
-        PORTE = n;
-        asm volatile ("nop; nop; nop; nop; nop; nop; nop; nop; nop; nop");
-        r = PORTD & 0xF;
-        output_result (10, n, r);
     }
 }
 

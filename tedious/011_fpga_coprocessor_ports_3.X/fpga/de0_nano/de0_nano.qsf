@@ -46,17 +46,17 @@ set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to port_e[0]
 # port_f
 #============================================================
 
-set_location_assignment PIN_T15 -to port_f[3]
+set_location_assignment PIN_T15 -to port_f[4]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to port_f[4]
+
+set_location_assignment PIN_R9 -to port_f[3]
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to port_f[3]
 
-set_location_assignment PIN_R9 -to port_f[2]
+set_location_assignment PIN_F13 -to port_f[2]
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to port_f[2]
 
-set_location_assignment PIN_F13 -to port_f[1]
+set_location_assignment PIN_T9 -to port_f[1]
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to port_f[1]
-
-set_location_assignment PIN_T9 -to port_f[0]
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to port_f[0]
 
 #============================================================
 # port_d
