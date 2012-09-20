@@ -2,7 +2,7 @@ module de0_nano
 (
     input         clock,
     input  [7: 0] port_e,
-    input  [3: 0] port_f,
+    input  [4: 1] port_f,
     output [3: 0] port_d,
     output [1:12] display,
     output [7: 0] leds
