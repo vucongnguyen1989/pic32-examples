@@ -111,7 +111,7 @@
 // Code protection settings
 
 // Code Protect: ON, OFF
-#pragma config CP = ON
+#pragma config CP = OFF
 
 // Boot Flash Write Protect bit: ON, OFF
 #pragma config BWP = OFF
