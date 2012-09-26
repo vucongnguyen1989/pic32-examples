@@ -159,8 +159,9 @@ void run (void)
         PORTE = n;
         PORTD = PORTD_NO_RESET | (n & 1 ? 0 : PORTD_TAG);
         asm volatile ("nop; nop; nop; nop; nop");
-        asm volatile ("nop; nop; nop; nop; nop");
-        asm volatile ("nop; ");
+//      asm volatile ("nop; nop; nop; nop; nop");
+//        asm volatile ("nop; nop; nop; nop; nop");
+//        asm volatile ("nop; ");
 //        asm volatile ("nop; nop; nop; nop; nop");
 //        asm volatile ("nop; nop; nop; nop; nop");
 //        asm volatile ("nop; nop; nop; nop; nop");
