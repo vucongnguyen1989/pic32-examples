@@ -10,6 +10,9 @@ module top
 
 wire reset_n = port_d_in [5];
 
+reg [7:0] data0;
+reg       tag0;
+
 reg [7:0] data;
 reg       tag;
 
@@ -17,13 +20,19 @@ always @(posedge clock or negedge reset_n)
 begin
     if (! reset_n)
     begin
-        data <= 0;
-        tag  <= 0;
+        data0 <= 0;
+        tag0  <= 0;
+
+        data  <= 0;
+        tag   <= 0;
     end
     else
     begin
-        data <= port_e;
-        tag  <= port_d_in [6];
+        data0 <= port_e;
+        tag0  <= port_d_in [6];
+
+        data  <= data0;
+        tag   <= tag0;
     end
 end
 
@@ -65,6 +74,7 @@ begin
     mul_b      = 0;
 
     case (r_state)
+
     0:
         if (first_tag || tag != prev_tag)
         begin
@@ -98,6 +108,7 @@ begin
             result     = r_mul_result;
             state      = 0;
         end
+
     endcase
 end
 
@@ -112,7 +123,7 @@ begin
         r_first_tag   <= 1;
         r_prev_tag    <= 0;
 
-		  r_result      <= 0;
+        r_result      <= 0;
     end
     else
     begin
@@ -123,7 +134,7 @@ begin
         r_first_tag   <= first_tag;
         r_prev_tag    <= prev_tag;
 
-		  r_result      <= result;
+        r_result      <= result;
     end
 end
 
