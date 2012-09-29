@@ -13,50 +13,52 @@ void uart_init (uint hertz, uint baud)
     U1BRG           = hertz / 16 / baud - 1;
     U1MODEbits.ON   = 1;   // enable UART
 
-    uart_put_nl ();
+    uart_put_new_line ();
 }
 
-void uart_putc (uchar c)
+void uart_put_char (uchar c)
 {
     while (U1STAbits.UTXBF);  // wait until transmit buffer empty
     U1TXREG = c;              // transmit character over UART
 }
 
-void uart_put_nl (void)
+void uart_put_new_line (void)
 {
-    uart_putc ('\r');
-    uart_putc ('\n');
+    uart_put_char ('\r');
+    uart_put_char ('\n');
 }
 
-void uart_puts (uchar *s)
+void uart_put_str (uchar *s)
 {
     while (*s != '\0')
-        uart_putc (*s++);
+        uart_put_char (*s++);
 }
 
-void uart_putn (uint n)
+void uart_put_dec (uint n)
 {
     uint i;
 
     for (i = 1000 * 1000 * 1000; i >= 1; i /= 10)
     {
         if (n >= i || i == 1)
-            uart_putc ('0' + n / i % 10);
+            uart_put_char ('0' + n / i % 10);
     }
 }
 
-void uart_putx (uint n)
+void uart_put_hex_digit (uint n)
+{
+    uchar c;
+
+    c  = n & 0x0f;
+    c += c >= 10 ? 'A' - 10 : '0';
+
+    uart_put_char (c);
+}
+
+void uart_put_hex (uint n)
 {
     uint i;
 
     for (i = 0; i < sizeof (n) * 2; i++)
-    {
-        uchar c;
-
-        c =  n >> (sizeof (n) * 2 - 1 - i) * 4;
-        c &= 0x0f;
-        c += c >= 10 ? 'A' - 10 : '0';
-
-        uart_putc (c);
-    }
+        uart_put_hex_digit (n >> (sizeof (n) * 2 - 1 - i) * 4);
 }
