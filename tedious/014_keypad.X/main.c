@@ -52,7 +52,7 @@ static void poll ()
         PORTFbits.RF4  = col != 1;
         PORTBbits.RB14 = col != 0;
 
-        for (row = 0; row <= n_rows; row ++)
+        for (row = 0; row < n_rows; row ++)
         {
             bool on;
 
@@ -116,14 +116,9 @@ uchar keypad_get ()
 
 void main (void)
 {
-    int row, col;
-
     uart_init (PBCLK_FREQUENCY, 9600);
     keypad_init ();
 
     for (;;)
-    {
-        uart_putn   (keypad_get ());
-        uart_put_nl ();
-    }
+        uart_putx (keypad_get ());
 }
