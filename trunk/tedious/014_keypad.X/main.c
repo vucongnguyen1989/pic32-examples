@@ -120,5 +120,5 @@ void main (void)
     keypad_init ();
 
     for (;;)
-        uart_putx (keypad_get ());
+        uart_put_hex_digit (keypad_get ());
 }

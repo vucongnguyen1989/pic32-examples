@@ -41,11 +41,11 @@ OBJECTDIR=build/${CND_CONF}/${IMAGE_TYPE}
 DISTDIR=dist/${CND_CONF}/${IMAGE_TYPE}
 
 # Object Files Quoted if spaced
-OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/main.o
-POSSIBLE_DEPFILES=${OBJECTDIR}/main.o.d
+OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/main.o ${OBJECTDIR}/_ext/1514297492/delay.o ${OBJECTDIR}/_ext/1514297492/running.o ${OBJECTDIR}/_ext/1514297492/uart.o ${OBJECTDIR}/config.o
+POSSIBLE_DEPFILES=${OBJECTDIR}/main.o.d ${OBJECTDIR}/_ext/1514297492/delay.o.d ${OBJECTDIR}/_ext/1514297492/running.o.d ${OBJECTDIR}/_ext/1514297492/uart.o.d ${OBJECTDIR}/config.o.d
 
 # Object Files
-OBJECTFILES=${OBJECTDIR}/main.o
+OBJECTFILES=${OBJECTDIR}/main.o ${OBJECTDIR}/_ext/1514297492/delay.o ${OBJECTDIR}/_ext/1514297492/running.o ${OBJECTDIR}/_ext/1514297492/uart.o ${OBJECTDIR}/config.o
 
 
 CFLAGS=
@@ -84,13 +84,53 @@ ifeq ($(TYPE_IMAGE), DEBUG_RUN)
 ${OBJECTDIR}/main.o: main.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} ${OBJECTDIR} 
 	@${RM} ${OBJECTDIR}/main.o.d 
-	@${FIXDEPS} "${OBJECTDIR}/main.o.d" $(SILENT) -c  ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1 -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/main.o.d" -o ${OBJECTDIR}/main.o main.c  
+	@${FIXDEPS} "${OBJECTDIR}/main.o.d" $(SILENT) -c  ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1 -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -I"C:/pic32-examples/tedious/library" -MMD -MF "${OBJECTDIR}/main.o.d" -o ${OBJECTDIR}/main.o main.c  
+	
+${OBJECTDIR}/_ext/1514297492/delay.o: ../library/delay.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} ${OBJECTDIR}/_ext/1514297492 
+	@${RM} ${OBJECTDIR}/_ext/1514297492/delay.o.d 
+	@${FIXDEPS} "${OBJECTDIR}/_ext/1514297492/delay.o.d" $(SILENT) -c  ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1 -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -I"C:/pic32-examples/tedious/library" -MMD -MF "${OBJECTDIR}/_ext/1514297492/delay.o.d" -o ${OBJECTDIR}/_ext/1514297492/delay.o ../library/delay.c  
+	
+${OBJECTDIR}/_ext/1514297492/running.o: ../library/running.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} ${OBJECTDIR}/_ext/1514297492 
+	@${RM} ${OBJECTDIR}/_ext/1514297492/running.o.d 
+	@${FIXDEPS} "${OBJECTDIR}/_ext/1514297492/running.o.d" $(SILENT) -c  ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1 -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -I"C:/pic32-examples/tedious/library" -MMD -MF "${OBJECTDIR}/_ext/1514297492/running.o.d" -o ${OBJECTDIR}/_ext/1514297492/running.o ../library/running.c  
+	
+${OBJECTDIR}/_ext/1514297492/uart.o: ../library/uart.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} ${OBJECTDIR}/_ext/1514297492 
+	@${RM} ${OBJECTDIR}/_ext/1514297492/uart.o.d 
+	@${FIXDEPS} "${OBJECTDIR}/_ext/1514297492/uart.o.d" $(SILENT) -c  ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1 -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -I"C:/pic32-examples/tedious/library" -MMD -MF "${OBJECTDIR}/_ext/1514297492/uart.o.d" -o ${OBJECTDIR}/_ext/1514297492/uart.o ../library/uart.c  
+	
+${OBJECTDIR}/config.o: config.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} ${OBJECTDIR} 
+	@${RM} ${OBJECTDIR}/config.o.d 
+	@${FIXDEPS} "${OBJECTDIR}/config.o.d" $(SILENT) -c  ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1 -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -I"C:/pic32-examples/tedious/library" -MMD -MF "${OBJECTDIR}/config.o.d" -o ${OBJECTDIR}/config.o config.c  
 	
 else
 ${OBJECTDIR}/main.o: main.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} ${OBJECTDIR} 
 	@${RM} ${OBJECTDIR}/main.o.d 
-	@${FIXDEPS} "${OBJECTDIR}/main.o.d" $(SILENT) -c  ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/main.o.d" -o ${OBJECTDIR}/main.o main.c  
+	@${FIXDEPS} "${OBJECTDIR}/main.o.d" $(SILENT) -c  ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -I"C:/pic32-examples/tedious/library" -MMD -MF "${OBJECTDIR}/main.o.d" -o ${OBJECTDIR}/main.o main.c  
+	
+${OBJECTDIR}/_ext/1514297492/delay.o: ../library/delay.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} ${OBJECTDIR}/_ext/1514297492 
+	@${RM} ${OBJECTDIR}/_ext/1514297492/delay.o.d 
+	@${FIXDEPS} "${OBJECTDIR}/_ext/1514297492/delay.o.d" $(SILENT) -c  ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -I"C:/pic32-examples/tedious/library" -MMD -MF "${OBJECTDIR}/_ext/1514297492/delay.o.d" -o ${OBJECTDIR}/_ext/1514297492/delay.o ../library/delay.c  
+	
+${OBJECTDIR}/_ext/1514297492/running.o: ../library/running.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} ${OBJECTDIR}/_ext/1514297492 
+	@${RM} ${OBJECTDIR}/_ext/1514297492/running.o.d 
+	@${FIXDEPS} "${OBJECTDIR}/_ext/1514297492/running.o.d" $(SILENT) -c  ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -I"C:/pic32-examples/tedious/library" -MMD -MF "${OBJECTDIR}/_ext/1514297492/running.o.d" -o ${OBJECTDIR}/_ext/1514297492/running.o ../library/running.c  
+	
+${OBJECTDIR}/_ext/1514297492/uart.o: ../library/uart.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} ${OBJECTDIR}/_ext/1514297492 
+	@${RM} ${OBJECTDIR}/_ext/1514297492/uart.o.d 
+	@${FIXDEPS} "${OBJECTDIR}/_ext/1514297492/uart.o.d" $(SILENT) -c  ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -I"C:/pic32-examples/tedious/library" -MMD -MF "${OBJECTDIR}/_ext/1514297492/uart.o.d" -o ${OBJECTDIR}/_ext/1514297492/uart.o ../library/uart.c  
+	
+${OBJECTDIR}/config.o: config.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} ${OBJECTDIR} 
+	@${RM} ${OBJECTDIR}/config.o.d 
+	@${FIXDEPS} "${OBJECTDIR}/config.o.d" $(SILENT) -c  ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -I"C:/pic32-examples/tedious/library" -MMD -MF "${OBJECTDIR}/config.o.d" -o ${OBJECTDIR}/config.o config.c  
 	
 endif
 

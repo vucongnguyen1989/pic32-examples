@@ -13,7 +13,12 @@ void uart_init (uint hertz, uint baud)
     U1BRG           = hertz / 16 / baud - 1;
     U1MODEbits.ON   = 1;   // enable UART
 
-    uart_put_new_line ();
+    uart_put_new_line  ();
+    uart_put_str       ("UART: Peripheral bus: ");
+    uart_put_dec       (hertz);
+    uart_put_str       (" Hz, baud rate: ");
+    uart_put_dec       (baud);
+    uart_put_new_line  ();
 }
 
 void uart_put_char (uchar c)

@@ -16,9 +16,9 @@ module de0_nano
     pll50_200 pll50_200_inst
     (
         .areset ( ~ reset_n          ),
-	.inclk0 (   clock            ),
-	.c0     (   multiplied_clock ),
-	.locked (   locked           )
+        .inclk0 (   clock            ),
+        .c0     (   multiplied_clock ),
+        .locked (   locked           )
     );
 
     wire [7: 0] buf_port_e;
@@ -28,6 +28,13 @@ module de0_nano
     ibuf8 ibuf8_inst ( port_e         , buf_port_e     );
     ibuf4 ibuf4_inst ( port_d_in      , buf_port_d_in  );
     obuf4 obuf4_inst ( buf_port_d_out , port_d_out     );
+
+    // Alternatively, we can simply rely
+    // on default insertion of I/O cells
+    //
+    // assign buf_port_e    = port_e;
+    // assign buf_port_d_in = port_d_in;
+    // assign port_d_out    = buf_port_d_out;
 
     top top_inst
     (
