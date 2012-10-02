@@ -47,16 +47,27 @@ void output_result
 {
     uint expected_result = calculate_expected_result (argument);
 
-    if (result == expected_result)
-        return;
+    // if (result == expected_result)
+    //     return;
 
     uart_put_dec      (number_of_nops);
     uart_put_str      (" nops ");
     uart_put_dec      (argument);
     uart_put_char     (' ');
     uart_put_dec      (result);
-    uart_put_char     (' ');
-    uart_put_dec      (expected_result);
+
+    if (result == expected_result)
+    {
+        uart_put_str  (" ok");
+        delay_millis  (100);
+    }
+    else
+    {
+        uart_put_str  (" bad ");
+        uart_put_dec  (expected_result);
+        delay_millis  (1000);
+    }
+
     uart_put_new_line ();
 }
 
