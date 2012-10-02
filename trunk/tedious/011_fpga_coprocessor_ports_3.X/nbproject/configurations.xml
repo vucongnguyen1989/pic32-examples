@@ -16,7 +16,7 @@
       <itemPath>../library/delay.c</itemPath>
       <itemPath>../library/running.c</itemPath>
       <itemPath>../library/uart.c</itemPath>
-      <itemPath>config.c</itemPath>
+      <itemPath>../library/config.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"

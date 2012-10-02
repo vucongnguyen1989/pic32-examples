@@ -89,5 +89,5 @@ void running_fast_4 ()
 
 void running_fast ()
 {
-    running_fast_2 ();
+    running_fast_1 ();
 }

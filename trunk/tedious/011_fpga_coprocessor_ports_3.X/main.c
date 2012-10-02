@@ -87,21 +87,24 @@ void run (void)
         r = PORTD & 0xF;
         output_result (5, n, r);
     }
+
+    fpga_init ();
+
+    for (n = 0; n < 256; n++)
+    {
+        PORTE = n;
+        PORTD = PORTD_NO_RESET | (n & 1 ? 0 : PORTD_TAG);
+        asm volatile ("nop; nop; nop; nop; nop; nop");
+        r = PORTD & 0xF;
+        output_result (6, n, r);
+    }
+
+    delay_seconds (10);
 }
 
 void main (void)
 {
-    uint i;
-
-    uart_init (PBCLK_FREQUENCY, 9600);
     running_fast ();
-
-    for (i = 0;; i++)
-    {
-        delay_seconds     (1);
-        uart_put_dec      (i);
-        uart_put_new_line ();
-    }
 
     for (;;)
         run ();
