@@ -9,8 +9,10 @@
 #include "types.h"
 #include "uart.h"
 
-#define PORTD_NO_RESET      0x20
-#define PORTD_TAG           0x40
+#define PORTD_DELAY_VALUE  (PORTD >> 8)  // I/O Shield Switches
+
+#define PORTD_NO_RESET     0x20
+#define PORTD_TAG          0x40
 
 void fpga_init (void)
 {
@@ -18,8 +20,8 @@ void fpga_init (void)
 
     AD1PCFG = ~0;  // No analog ports
 
-    TRISE = 0x00;  // PORT E is an output
-    TRISD = 0x1F;  // PORT D [7:5] - output, [3:0] - input
+    TRISE = 0x00;   // PORT E is an output
+    TRISD = 0xF1F;  // PORT D [11:8] - input, D [7:5] - output, [3:0] - input
 
     delay_millis (1);
 
@@ -50,25 +52,24 @@ void output_result
     // if (result == expected_result)
     //     return;
 
-    uart_put_dec      (number_of_nops);
-    uart_put_str      (" nops ");
-    uart_put_dec      (argument);
-    uart_put_char     (' ');
-    uart_put_dec      (result);
+    uart_put_dec  (number_of_nops);
+    uart_put_str  (" nops ");
+    uart_put_dec  (argument);
+    uart_put_char (' ');
+    uart_put_dec  (result);
 
     if (result == expected_result)
     {
-        uart_put_str  (" ok");
-        delay_millis  (100);
+        uart_put_str (" ok");
     }
     else
     {
-        uart_put_str  (" bad ");
-        uart_put_dec  (expected_result);
-        delay_millis  (1000);
+        uart_put_str (" bad ");
+        uart_put_dec (expected_result);
     }
 
     uart_put_new_line ();
+    delay_millis (PORTD_DELAY_VALUE * 100);
 }
 
 void run (void)
@@ -110,7 +111,7 @@ void run (void)
         output_result (6, n, r);
     }
 
-    delay_seconds (10);
+    delay_seconds (1);
 }
 
 void main (void)
