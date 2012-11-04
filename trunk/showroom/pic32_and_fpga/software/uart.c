@@ -21,12 +21,6 @@ void uart_init (uint hertz, uint baud)
     uart_put_new_line  ();
 }
 
-uchar uart_get_char (void)
-{
-    while (! U1STAbits.URXDA);  // wait until data is available
-    return U1RXREG;             // return received character over UART
-}
-
 void uart_put_char (uchar c)
 {
     while (U1STAbits.UTXBF);  // wait until transmit buffer empty

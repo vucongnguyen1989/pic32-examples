@@ -2,7 +2,7 @@ set_global_assignment -name FAMILY "Cyclone IV E"
 set_global_assignment -name DEVICE EP4CE22F17C6
 set_global_assignment -name TOP_LEVEL_ENTITY "de0_nano"
 set_global_assignment -name ORIGINAL_QUARTUS_VERSION "12.0"
-set_global_assignment -name LAST_QUARTUS_VERSION "12.0"
+set_global_assignment -name LAST_QUARTUS_VERSION "12.0 SP2"
 set_global_assignment -name PROJECT_CREATION_TIME_DATE "21:47:59 SEPTEMBER 06,2012"
 set_global_assignment -name DEVICE_FILTER_PACKAGE FBGA
 set_global_assignment -name DEVICE_FILTER_PIN_COUNT 256
