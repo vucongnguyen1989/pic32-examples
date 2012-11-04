@@ -43,36 +43,33 @@ set_location_assignment PIN_L14 -to port_e[0]
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to port_e[0]
 
 #============================================================
-# port_f
+# port_d_in
 #============================================================
 
-set_location_assignment PIN_T15 -to port_f[3]
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to port_f[3]
+set_location_assignment PIN_R9 -to port_d_in[7]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to port_d_in[7]
 
-set_location_assignment PIN_R9 -to port_f[2]
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to port_f[2]
+set_location_assignment PIN_F13 -to port_d_in[6]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to port_d_in[6]
 
-set_location_assignment PIN_F13 -to port_f[1]
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to port_f[1]
-
-set_location_assignment PIN_T9 -to port_f[0]
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to port_f[0]
+set_location_assignment PIN_T9 -to port_d_in[5]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to port_d_in[5]
 
 #============================================================
-# port_d
+# port_d_out
 #============================================================
 
-set_location_assignment PIN_T12 -to port_d[3]
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to port_d[3]
+set_location_assignment PIN_T12 -to port_d_out[3]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to port_d_out[3]
 
-set_location_assignment PIN_R13 -to port_d[2]
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to port_d[2]
+set_location_assignment PIN_R13 -to port_d_out[2]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to port_d_out[2]
 
-set_location_assignment PIN_T13 -to port_d[1]
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to port_d[1]
+set_location_assignment PIN_T13 -to port_d_out[1]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to port_d_out[1]
 
-set_location_assignment PIN_T14 -to port_d[0]
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to port_d[0]
+set_location_assignment PIN_T14 -to port_d_out[0]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to port_d_out[0]
 
 #============================================================
 # display
@@ -129,11 +126,14 @@ set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to leds[7]
 # End of pin assignments
 #============================================================
 
-set_global_assignment -name VERILOG_FILE ../../top.v
 set_global_assignment -name VERILOG_FILE ../de0_nano.v
+set_global_assignment -name VERILOG_FILE ../top.v
+set_global_assignment -name VERILOG_FILE ../display_driver.v
 
 set_global_assignment -name PARTITION_NETLIST_TYPE SOURCE -section_id Top
 set_global_assignment -name PARTITION_FITTER_PRESERVATION_LEVEL PLACEMENT_AND_ROUTING -section_id Top
 set_global_assignment -name PARTITION_COLOR 16764057 -section_id Top
 
+
+set_global_assignment -name QIP_FILE ../pll50_200.qip
 set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
