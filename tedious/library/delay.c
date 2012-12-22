@@ -1,5 +1,9 @@
 //  File:   delay.c
 //  Author: Yuri Panchul
+//
+//  This code uses fragments adopted from
+//  Digital Design and Computer Architecture, Second Edition
+//  by David Harris & Sarah Harris
 
 #include <p32xxxx.h>
 
@@ -21,10 +25,6 @@ void delay_for_1000_nops ()
 {
     delay_for_1000_nops_x (1);
 }
-
-// The following function is adopted from
-// Digital Design and Computer Architecture
-// by David Harris & Sarah Harris
 
 void delay_micros (uint n)
 {
