@@ -14,29 +14,29 @@ void spi_init (void)
 {
     char dummy;
 
-    SPI1CONbits.ON     = 0;        // disable SPI to reset any previous state
+    SPI2CONbits.ON     = 0;        // disable SPI to reset any previous state
     dummy              = SPI2BUF;  // clear receive buffer
-    SPI1BRG            = 7;
-    SPI1CONbits.MSTEN  = 1;        // enable master mode
-    SPI1CONbits.CKE    = 1;        // set clock-to-data timing
-    SPI1CONbits.ON     = 1;        // turn SPI on
+    SPI2BRG            = 7;
+    SPI2CONbits.MSTEN  = 1;        // enable master mode
+    SPI2CONbits.CKE    = 1;        // set clock-to-data timing
+    SPI2CONbits.ON     = 1;        // turn SPI on
 }
 
 uchar spi_put_get_char (uchar c)
 {
-    SPI1BUF = c;                   // send data to slave
-    while (SPI1STATbits.SPIBUSY);  // wait until SPI transmission complete
-    return SPI1BUF;
+    SPI2BUF = c;                   // send data to slave
+    while (SPI2STATbits.SPIBUSY);  // wait until SPI transmission complete
+    return SPI2BUF;
 }
 
 uchar spi_get_char (void)
 {
-    return spi_put_get (0);
+    return spi_put_get_char (0);
 }
 
 void spi_put_char (uchar c)
 {
-    (void) spi_put_get (c);
+    (void) spi_put_get_char (c);
 }
 
 void spi_put_new_line (void)
