@@ -14,14 +14,10 @@ void display_init (void)
 {
     spi_init (9600);  // baud
 
-    memset (buf, ' ', sizeof (buf));
-
-    col = 0;
-
-//    spi_put_str ("\033[*");     // reset
-//    spi_put_str ("\033[0h");    // set display mode - wrap line at 16 characters
-//    spi_put_str ("\033[2c");    // set cursor mode - cursor on, blink on
     spi_put_str ("\033[1;0H");  // set cursor position to row 1 column 0
+
+    memset (buf, ' ', sizeof (buf));
+    col = 0;
 }
 
 static void scroll ()
@@ -39,6 +35,8 @@ static void scroll ()
         spi_put_char (' ');
 
     spi_put_str ("\033[1;0H");  // set cursor position to row 1 column 0
+
+    memset (buf, ' ', sizeof (buf));
     col = 0;
 }
 
