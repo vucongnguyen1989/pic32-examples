@@ -17,14 +17,14 @@ void run (void)
     display_init ();
     keypad_init (true);  // use_interrupts
 
-    for (i = 0; i < 40; i++)
+    for (i = 0; i < 400000; i++)
     {
         uchar c = keypad_get ();
 
         if (c == 0)
             display_new_line ();
         else
-            display_hex_digit (keypad_get ());
+            display_hex_digit (c);
     }
 }
 
