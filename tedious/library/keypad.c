@@ -1,4 +1,4 @@
-//  File:   main.c
+//  File:   keypad.c
 //  Author: Yuri Panchul
 
 #include <p32xxxx.h>
@@ -46,10 +46,10 @@ static void poll ()
 
     for (col = 0; col < n_cols; col ++)
     {
-        PORTBbits.RB8  = col != 3;
-        PORTFbits.RF5  = col != 2;
-        PORTFbits.RF4  = col != 1;
-        PORTBbits.RB14 = col != 0;
+        PORTEbits.RE3 = col != 0;
+        PORTEbits.RE2 = col != 1;
+        PORTEbits.RE1 = col != 2;
+        PORTEbits.RE0 = col != 3;
 
         for (row = 0; row < n_rows; row ++)
         {
@@ -57,10 +57,10 @@ static void poll ()
 
             switch (row)
             {
-                case 3: on = ! PORTBbits.RB0; break;
-                case 2: on = ! PORTBbits.RB1; break;
-                case 1: on = ! PORTDbits.RD0; break;
-                case 0: on = ! PORTDbits.RD1; break;
+                case 0: on = ! PORTEbits.RE7; break;
+                case 1: on = ! PORTEbits.RE6; break;
+                case 2: on = ! PORTEbits.RE5; break;
+                case 3: on = ! PORTEbits.RE4; break;
             }
 
             if (on && ! matrix [row][col])
@@ -76,7 +76,7 @@ void keypad_init ()
     memset (matrix, 0, sizeof (matrix));
     i_put = i_get = 0;
 
-    TRISE = 0;
+    TRISE = 0xF0;
 }
 
 bool keypad_try_get (uchar * pa)

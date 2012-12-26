@@ -66,6 +66,14 @@ void uart_put_hex_digit (uint n)
     uart_put_char (c);
 }
 
+void uart_put_hex_byte (uchar n)
+{
+    uint i;
+
+    for (i = 0; i < sizeof (n) * 2; i++)
+        uart_put_hex_digit (n >> (sizeof (n) * 2 - 1 - i) * 4);
+}
+
 void uart_put_hex (uint n)
 {
     uint i;

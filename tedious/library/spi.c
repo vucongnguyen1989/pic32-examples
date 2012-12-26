@@ -10,13 +10,13 @@
 #include "config.h"
 #include "spi.h"
 
-void spi_init (void)
+void spi_init (uint hertz, uint baud)
 {
     char dummy;
 
     SPI2CONbits.ON     = 0;        // disable SPI to reset any previous state
     dummy              = SPI2BUF;  // clear receive buffer
-    SPI2BRG            = 7;
+    SPI2BRG            = hertz / 16 / baud - 1;
     SPI2CONbits.MSTEN  = 1;        // enable master mode
     SPI2CONbits.CKE    = 1;        // set clock-to-data timing
     SPI2CONbits.ON     = 1;        // turn SPI on
@@ -70,6 +70,14 @@ void spi_put_hex_digit (uint n)
     c += c >= 10 ? 'A' - 10 : '0';
 
     spi_put_char (c);
+}
+
+void spi_put_hex_byte (uchar n)
+{
+    uint i;
+
+    for (i = 0; i < sizeof (n) * 2; i++)
+        spi_put_hex_digit (n >> (sizeof (n) * 2 - 1 - i) * 4);
 }
 
 void spi_put_hex (uint n)
