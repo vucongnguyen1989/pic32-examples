@@ -10,13 +10,13 @@
 #include "config.h"
 #include "spi.h"
 
-void spi_init (uint hertz, uint baud)
+void spi_init (uint baud)
 {
     char dummy;
 
     SPI2CONbits.ON     = 0;        // disable SPI to reset any previous state
     dummy              = SPI2BUF;  // clear receive buffer
-    SPI2BRG            = hertz / 16 / baud - 1;
+    SPI2BRG            = PBCLK_FREQUENCY / 16 / baud - 1;
     SPI2CONbits.MSTEN  = 1;        // enable master mode
     SPI2CONbits.CKE    = 1;        // set clock-to-data timing
     SPI2CONbits.ON     = 1;        // turn SPI on

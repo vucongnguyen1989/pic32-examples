@@ -6,7 +6,7 @@
 
 #include "types.h"
 
-void  spi_init           (uint hertz, uint baud);
+void  spi_init           (uint baud);
 
 uchar spi_put_get_char   (uchar c);
 

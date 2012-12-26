@@ -6,7 +6,7 @@
 
 #include "types.h"
 
-void  uart_init           (uint hertz, uint baud);
+void  uart_init           (uint baud);
 
 uchar uart_get_char       (void);
 

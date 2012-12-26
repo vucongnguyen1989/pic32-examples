@@ -14,8 +14,8 @@ void run (void)
 {
     int i;
 
-    spi_init (PBCLK_FREQUENCY, 9600);
-    keypad_init ();
+    spi_init (9600);  // baud
+    keypad_init (false);  // use_interrupts
 
     spi_put_str ("\033[*");
 

@@ -64,7 +64,7 @@
 #pragma config FPLLODIV = DIV_1
 
 // Peripheral Clock Divisor: Pb_Clk = Sys_Clk / DIV_1, DIV_2, DIV_4, DIV_8
-#pragma config FPBDIV = DIV_8
+#pragma config FPBDIV = DIV_4
 
 // Secondary Oscillator Enable: ON OFF
 #pragma config FSOSCEN = OFF
