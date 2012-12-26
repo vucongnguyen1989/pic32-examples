@@ -81,7 +81,7 @@ void __attribute__ ((interrupt (IPL7))) __attribute__ ((vector (4))) keypad_time
 
 void keypad_init (bool use_interrupts)
 {
-    // init buffer
+    // init buffers
 
     memset (matrix, 0, sizeof (matrix));
     i_put = i_get = 0;
@@ -94,7 +94,7 @@ void keypad_init (bool use_interrupts)
 
     use_timer_interrupt = use_interrupts;
 
-    if (! use_interrupts)
+    if (! use_timer_interrupt)
         return;
 
     T1CONbits.ON     = 0;      // turn timer off
@@ -127,7 +127,7 @@ bool keypad_try_get (uchar * pa)
     return true;
 }
 
-uchar keypad_get ()
+uchar keypad_get (void)
 {
     uchar a;
 

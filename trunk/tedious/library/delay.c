@@ -21,7 +21,7 @@ void delay_for_1000_nops_x (uint n)
     }
 }
 
-void delay_for_1000_nops ()
+void delay_for_1000_nops (void)
 {
     delay_for_1000_nops_x (1);
 }

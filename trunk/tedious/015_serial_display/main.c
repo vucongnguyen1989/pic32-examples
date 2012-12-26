@@ -14,15 +14,17 @@ void run (void)
 {
     int i;
 
-    spi_init (9600);  // baud
-    keypad_init (false);  // use_interrupts
+    display_init ();
+    keypad_init (true);  // use_interrupts
 
-    spi_put_str ("\033[*");
-
-    for (i = 0; i < 2000000; i++)
+    for (i = 0; i < 40; i++)
     {
-        spi_put_str ("\033[0;0H");
-        spi_put_hex_digit (keypad_get ());
+        uchar c = keypad_get ();
+
+        if (c == 0)
+            display_new_line ();
+        else
+            display_hex_digit (keypad_get ());
     }
 }
 

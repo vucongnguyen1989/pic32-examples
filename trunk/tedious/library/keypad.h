@@ -8,6 +8,6 @@
 
 void  keypad_init     (bool use_interrupts);
 bool  keypad_try_get  (uchar * pa);
-uchar keypad_get      ();
+uchar keypad_get      (void);
 
 #endif

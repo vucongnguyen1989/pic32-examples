@@ -8,7 +8,7 @@
 #include "running.h"
 #include "types.h"
 
-void running_fast_1 ()
+void running_fast_1 (void)
 {
     uint config;
     
@@ -21,7 +21,7 @@ void running_fast_1 ()
     asm volatile ("mtc0 %0, $16" : "=r" (config));
 }
 
-void running_fast_2 ()
+void running_fast_2 (void)
 {
     // CHECON [2:0] PFMWS
 
@@ -76,18 +76,18 @@ void running_fast_2 ()
     }
 }
 
-void running_fast_3 ()
+void running_fast_3 (void)
 {
 
     SYSTEMConfig (SYSCLK_FREQUENCY, SYS_CFG_ALL); 
 }
 
-void running_fast_4 ()
+void running_fast_4 (void)
 {
     SYSTEMConfigPerformance (SYSCLK_FREQUENCY);
 }
 
-void running_fast ()
+void running_fast (void)
 {
     running_fast_1 ();
 }
