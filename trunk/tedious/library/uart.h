@@ -15,6 +15,7 @@ void  uart_put_new_line   (void     );
 void  uart_put_str        (uchar * s);
 void  uart_put_dec        (uint    n);
 void  uart_put_hex_digit  (uint    n);
+void  uart_put_hex_byte   (uchar   n);
 void  uart_put_hex        (uint    n);
 
 #endif

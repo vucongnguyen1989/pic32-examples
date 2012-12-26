@@ -8,6 +8,7 @@
 #include "running.h"
 #include "types.h"
 #include "spi.h"
+#include "uart.h"
 
 void f (void)
 {
@@ -64,34 +65,22 @@ void run (void)
 {
     int i;
 
-    delay_seconds (1);
-    spi_init ();
-
-    delay_seconds (1);
-  //  spi_put_str ("\033[*");
+    TRISE = 0xf0;
     delay_seconds (1);
 
-    spi_put_str ("abcdefghijklmnop");
+    spi_init (PBCLK_FREQUENCY, 9600);
     delay_seconds (1);
-    /*
-  spi_put_str ("\033[0e");
-    spi_put_str ("\033[1;0H0123456789abcdef");
-    delay_seconds (1);
-  spi_put_str ("\033[1e");
-    spi_put_str ("\033[1;0H0123456789abcdef");
-    delay_seconds (1);
-  spi_put_str ("\033[2e");
-    spi_put_str ("\033[1;0H0123456789abcdef");
-    delay_seconds (1);
-  spi_put_str ("\033[3e");
-    spi_put_str ("\033[1;0H0123456789abcdef");
-    delay_seconds (1);
-*/
-//    spi_put_str ("\033[0h");
-//    delay_seconds (1);
-//    g ();
 
-    //delay_seconds (10);
+    spi_put_str ("\033[*");
+    delay_seconds (1);
+
+    for (i = 0; i < 20; i++)
+    {
+        spi_put_str ("\033[0;0H");
+        spi_put_hex_digit (keypad_get ());
+    }
+
+    delay_seconds (1);
 }
 
 void main (void)
