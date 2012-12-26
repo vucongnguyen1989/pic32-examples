@@ -43,25 +43,17 @@ static bool put (uchar a)
 static void poll ()
 {
     int row, col;
+    int in;
 
     for (col = 0; col < n_cols; col ++)
     {
-        PORTEbits.RE3 = col != 0;
-        PORTEbits.RE2 = col != 1;
-        PORTEbits.RE1 = col != 2;
-        PORTEbits.RE0 = col != 3;
+        PORTE = ~ (8 >> ((col + 1) & 3));
+        in = PORTE >> 4;
 
         for (row = 0; row < n_rows; row ++)
         {
-            bool on;
-
-            switch (row)
-            {
-                case 0: on = ! PORTEbits.RE7; break;
-                case 1: on = ! PORTEbits.RE6; break;
-                case 2: on = ! PORTEbits.RE5; break;
-                case 3: on = ! PORTEbits.RE4; break;
-            }
+            bool on = ! (in & 8);
+            in <<= 1;
 
             if (on && ! matrix [row][col])
                 put (translation [row][col]);
