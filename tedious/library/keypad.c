@@ -1,5 +1,9 @@
 //  File:   keypad.c
 //  Author: Yuri Panchul
+//
+//  This code uses fragments adopted from
+//  Digital Design and Computer Architecture, Second Edition
+//  by David Harris & Sarah Harris
 
 #include <p32xxxx.h>
 
@@ -63,12 +67,44 @@ static void poll ()
     }
 }
 
+//
+//  The Timer 1 interrupt is Vector 4, using enable bit IECO<4>
+//  and flag bit IFSO<4>, priority IPC1<4:2>, subpriority IPC1<1:0>
+
+void __attribute__ ((interrupt (IPL7))) __attribute__ ((vector (4))) keypad_timer (void)
+{
+    poll ();
+    IFS0bits.T1IF = 0;
+}
+
 void keypad_init ()
 {
+    // init buffer
+
     memset (matrix, 0, sizeof (matrix));
     i_put = i_get = 0;
 
+    // init keypad port
+
     TRISE = 0xF0;
+
+    // init interrupt
+
+    T1CONbits.ON     = 0;      // turn timer off
+    TMR1             = 0;      // reset timer to 0
+
+    T1CONbits.TCKPS  = 3;      // 1:256 prescale
+    PR1              = PBCLK_FREQUENCY / 256 / 50;  // 1/50th of a second
+
+    INTCONbits.MVEC  = 1;      // enable multi-vector mode
+    IPC1bits.T1IP    = 7;      // interrupt priority
+    IPC1bits.T1IS    = 3;      // interrupt subpriority
+    IFS0bits.T1IF    = 0;      // clear the Timer 1 interrupt flag
+    IEC0bits.T1IE    = 1;      // enable the Timer 1 interrupt
+
+    asm volatile ("ei");       // enable interrupts
+
+    T1CONbits.ON     = 1;      // turn timer on
 }
 
 bool keypad_try_get (uchar * pa)
@@ -89,7 +125,7 @@ uchar keypad_get ()
     uchar a;
 
     while (! keypad_try_get (& a))
-        poll ();
+        ; // poll ();
 
     return a;
 }
