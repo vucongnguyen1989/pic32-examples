@@ -6,16 +6,16 @@
 #include "config.h"
 #include "uart.h"
 
-void uart_init (uint hertz, uint baud)
+void uart_init (uint baud)
 {
     U1STAbits.UTXEN = 1;   // enable transmit pin
     U1STAbits.URXEN = 1;   // enable receive pin
-    U1BRG           = hertz / 16 / baud - 1;
+    U1BRG           = PBCLK_FREQUENCY / 16 / baud - 1;
     U1MODEbits.ON   = 1;   // enable UART
 
     uart_put_new_line  ();
     uart_put_str       ("UART: Peripheral bus: ");
-    uart_put_dec       (hertz);
+    uart_put_dec       (PBCLK_FREQUENCY);
     uart_put_str       (" Hz, baud rate: ");
     uart_put_dec       (baud);
     uart_put_new_line  ();

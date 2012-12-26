@@ -28,6 +28,8 @@ static uint translation [n_rows][n_cols] =
 static uchar buf [buf_size];
 static int i_put, i_get;
 
+static bool use_timer_interrupt;
+
 static bool put (uchar a)
 {
     int next_i_put = i_put + 1;
@@ -77,7 +79,7 @@ void __attribute__ ((interrupt (IPL7))) __attribute__ ((vector (4))) keypad_time
     IFS0bits.T1IF = 0;
 }
 
-void keypad_init ()
+void keypad_init (bool use_interrupts)
 {
     // init buffer
 
@@ -89,6 +91,11 @@ void keypad_init ()
     TRISE = 0xF0;
 
     // init interrupt
+
+    use_timer_interrupt = use_interrupts;
+
+    if (! use_interrupts)
+        return;
 
     T1CONbits.ON     = 0;      // turn timer off
     TMR1             = 0;      // reset timer to 0
@@ -125,7 +132,8 @@ uchar keypad_get ()
     uchar a;
 
     while (! keypad_try_get (& a))
-        ; // poll ();
+        if (! use_timer_interrupt)
+            poll ();
 
     return a;
 }

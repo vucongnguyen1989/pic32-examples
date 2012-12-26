@@ -5,6 +5,6 @@
 #define CONFIG_H
 
 #define SYSCLK_FREQUENCY  (80 * 1000 * 1000)
-#define PBCLK_FREQUENCY   (10 * 1000 * 1000)
+#define PBCLK_FREQUENCY   (20 * 1000 * 1000)
 
 #endif
