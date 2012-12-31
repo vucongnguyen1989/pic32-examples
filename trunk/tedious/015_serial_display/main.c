@@ -5,6 +5,7 @@
 
 #include "config.h"
 #include "delay.h"
+#include "memory.h"
 #include "running.h"
 #include "types.h"
 #include "spi.h"
@@ -16,6 +17,8 @@
 #define div    0xd
 #define sign   0xe
 #define equal  0xf
+
+#if 0
 
 uchar * calculator (uchar in)
 {
@@ -174,12 +177,31 @@ void run (void)
     }
 }
 
+#endif
+
+void _mon_putc (char c)
+{
+   uart_put_char ((uchar) c);
+}
+
 void main (void)
 {
+    int i;
+
     running_fast ();
     display_init ();
     keypad_init  (true);  // use_interrupts
 
-    for (;;)
-        display_str (calculator (keypad_get ());
+    uart_init (9600);
+
+    __C32_UART = 1;
+
+    memory_report ();
+
+    for (;;);
+
+    return;
+
+//    for (;;)
+//        display_str (calculator (keypad_get ());
 }
