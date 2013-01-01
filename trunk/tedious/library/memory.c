@@ -8,7 +8,9 @@
 #include "types.h"
 #include "memory.h"
 
-static void dump (uint virtual_address, uint size)
+//--------------------------------------------------------------------
+
+static void memory_partition_dump (uint virtual_address, uint size)
 {
     uint * start        = (uint *) virtual_address;
     uint * end          = start + size / sizeof (uint);
@@ -64,12 +66,15 @@ static void dump (uint virtual_address, uint size)
     printf ("\n\n");
 }
 
-static void region
+//--------------------------------------------------------------------
+
+static void memory_partition_report
 (
     bool   kernel,
     char * name,
     uint   virtual_address,
-    uint   size
+    uint   size,
+    bool   dump
 )
 {
     uint physical_address
@@ -96,15 +101,134 @@ static void region
             size, size / 1024);
     }
 
-    if (size > 0 && size < 1024 * 1024)
-        dump (virtual_address, size);
+    if (dump && size > 0 && size < 1024 * 1024)
+        memory_partition_dump (virtual_address, size);
 }
 
-int memory_test_variable;
+//--------------------------------------------------------------------
+
+void memory_partitions_report (bool dump)
+{
+    bool no_optional_data_partitions
+        = (BMXDKPBA == 0) || (BMXDUDBA == 0) || (BMXDUPBA == 0);
+
+    if (dump)
+        printf ("*****  Memory map and dump  ************\n\n");
+    else
+        printf ("**********  Memory map  ****************\n\n");
+
+    printf ("                                                  Virtual            Physical                 Size\n");
+
+    memory_partition_report
+    (
+        true,
+        "Boot Flash",
+        0xBFC00000,
+        BMXBOOTSZ,
+        dump
+    );
+
+    memory_partition_report
+    (
+        true,
+        "Kernel Program Flash cacheable",
+        0x9D000000,
+        BMXPUPBA == 0 ? BMXPFMSZ : BMXPUPBA,
+        dump
+    );
+
+    memory_partition_report
+    (
+        true,
+        "Kernel Program Flash non-cacheable",
+        0xBD000000,
+        BMXPUPBA == 0 ? BMXPFMSZ : BMXPUPBA,
+        dump
+    );
+
+    memory_partition_report
+    (
+        true,
+        "Kernel Data RAM",
+        0x80000000,
+        no_optional_data_partitions ? BMXDRMSZ : BMXDKPBA,
+        dump
+    );
+
+    memory_partition_report
+    (
+        true,
+        "Kernel Data RAM",
+        0xA0000000,
+        no_optional_data_partitions ? BMXDRMSZ : BMXDKPBA,
+        dump
+    );
+
+    memory_partition_report
+    (
+        true,
+        "Kernel Program RAM",
+        0x80000000 + BMXDKPBA,
+        no_optional_data_partitions ? 0 : BMXDUDBA - BMXDKPBA,
+        dump
+    );
+
+    memory_partition_report
+    (
+        true,
+        "Kernel Program RAM",
+        0xA0000000 + BMXDKPBA,
+        no_optional_data_partitions ? 0 : BMXDUDBA - BMXDKPBA,
+        dump
+    );
+
+    memory_partition_report
+    (
+        true,
+        "Peripheral",
+        0xBF800000,
+        1024 * 1024,
+        false  // don't dump
+    );
+
+    memory_partition_report
+    (
+        false,
+        "User Program Flash",
+        0x7D000000 + BMXPUPBA,
+        BMXPUPBA == 0 ? 0 : BMXPFMSZ - BMXPUPBA,
+        dump
+    );
+
+    memory_partition_report
+    (
+        false,
+        "User Data RAM",
+        0x7F000000 + BMXDUDBA,
+        no_optional_data_partitions ? 0 : BMXDUPBA - BMXDUDBA,
+        dump
+    );
+
+    memory_partition_report
+    (
+        false,
+        "User Program RAM",
+        0x7F000000 + BMXDUPBA,
+        no_optional_data_partitions ? 0 : BMXDRMSZ - BMXDUPBA,
+        dump
+    );
+
+    printf ("\n");
+}
+
+//--------------------------------------------------------------------
+
+const int memory_test_const_variable = 2;
+      int memory_test_variable       = 3;
 
 __ramfunc__ int memory_test_ramfunc (int a, int b)
 {
-    return a * b;
+    return a * b * memory_test_const_variable * memory_test_variable;
 }
 
 __longramfunc__ int memory_test_longramfunc (int a, int b)
@@ -112,13 +236,18 @@ __longramfunc__ int memory_test_longramfunc (int a, int b)
     return memory_test_ramfunc (a, b);
 }
 
+int memory_test_regular_function (int a, int b)
+{
+    return memory_test_longramfunc (a, b);
+}
+
+//--------------------------------------------------------------------
+
 void memory_report (void)
 {
-    bool no_optional_data_partitions;
+    printf ("************  Memory report  ***********\n\n");
 
-    printf ("************  Memory report  ***********");
-
-    printf ("\nFlash memory data cacheability for DMA accesses is %s\n",
+    printf ("Flash memory data cacheability for DMA accesses is %s\n",
             BMXCONbits.BMXCHEDMA ? "ENABLED" : "DISABLED");
 
     if (BMXCONbits.BMXCHEDMA)
@@ -141,7 +270,7 @@ void memory_report (void)
     else
         printf ("(fast but has a problem with debugging data breakpoint)\n\n");
 
-    printf ("\nBus Matrix Arbitration Mode: %d\n",
+    printf ("Bus Matrix Arbitration Mode: %d\n",
             BMXCONbits.BMXARB);
 
     switch (BMXCONbits.BMXARB)
@@ -163,109 +292,29 @@ void memory_report (void)
             break;
     }
 
-    printf ("\nAddress map\n\n");
+    memory_partitions_report (false);
+    memory_partitions_report (true);
 
-    no_optional_data_partitions = (BMXDKPBA == 0) || (BMXDUDBA == 0) || (BMXDUPBA == 0);
+    printf ("**********  Functions in RAM  **********\n\n");
 
-    printf ("                                                  Virtual            Physical                 Size\n");
+    printf ("Address of memory_test_const_variable        : %8x\n",
+            (uint) & memory_test_const_variable);
 
-    region
-    (
-        true,
-        "Boot Flash",
-        0xBFC00000,
-        BMXBOOTSZ
-    );
+    printf ("Address of memory_test_variable              : %8x\n",
+            (uint) & memory_test_variable);
 
-    region
-    (
-        true,
-        "Kernel Program Flash cacheable",
-        0x9D000000,
-        BMXPUPBA == 0 ? BMXPFMSZ : BMXPUPBA
-    );
+    printf ("Address of memory_test_longramfunc           : %8x\n",
+            (uint) memory_test_longramfunc);
 
-    region
-    (
-        true,
-        "Kernel Program Flash non-cacheable",
-        0xBD000000,
-        BMXPUPBA == 0 ? BMXPFMSZ : BMXPUPBA
-    );
+    printf ("Address of memory_test_ramfunc               : %8x\n",
+            (uint) memory_test_ramfunc);
 
-    region
-    (
-        true,
-        "Kernel Data RAM",
-        0x80000000,
-        no_optional_data_partitions ? BMXDRMSZ : BMXDKPBA
-    );
+    printf ("Address of memory_test_regular_function      : %8x\n",
+            (uint) memory_test_regular_function);
 
-    region
-    (
-        true,
-        "Kernel Data RAM",
-        0xA0000000,
-        no_optional_data_partitions ? BMXDRMSZ : BMXDKPBA
-    );
+    printf ("\n"
+            "Calling memory_test_regular_function (2, 3)  : %d\n",
+            (uint) memory_test_regular_function (2, 3));
 
-    region
-    (
-        true,
-        "Kernel Program RAM",
-        0x80000000 + BMXDKPBA,
-        no_optional_data_partitions ? 0 : BMXDUDBA - BMXDKPBA
-    );
-
-    region
-    (
-        true,
-        "Kernel Program RAM",
-        0xA0000000 + BMXDKPBA,
-        no_optional_data_partitions ? 0 : BMXDUDBA - BMXDKPBA
-    );
-
-    region
-    (
-        true,
-        "Peripheral",
-        0xBF800000,
-        1024 * 1024
-    );
-
-    region
-    (
-        false,
-        "User Program Flash",
-        0x7D000000 + BMXPUPBA,
-        BMXPUPBA == 0 ? 0 : BMXPFMSZ - BMXPUPBA
-    );
-
-    region
-    (
-        false,
-        "User Data RAM",
-        0x7F000000 + BMXDUDBA,
-        no_optional_data_partitions ? 0 : BMXDUPBA - BMXDUDBA
-    );
-
-    region
-    (
-        false,
-        "User Program RAM",
-        0x7F000000 + BMXDUPBA,
-        no_optional_data_partitions ? 0 : BMXDRMSZ - BMXDUPBA
-    );
-
-    printf ("\n");
-    printf ("Test function : default      : %8x\n", (uint) memory_report    );
-    printf ("Test function : ramfunc      : %8x\n", (uint) memory_test_ramfunc     );
-    printf ("Test function : longramfunc  : %8x\n", (uint) memory_test_longramfunc );
-    printf ("\n");
-    printf ("Calling memory_test_longramfunc (2, 3) : %d\n", memory_test_longramfunc (2, 3));
-    printf ("\n");
-    printf ("Test variable : %8x\n", (uint) & memory_test_variable);
-    printf ("\n");
-
-    printf ("****************************************\n");
+    printf ("\n****************************************\n");
 }
