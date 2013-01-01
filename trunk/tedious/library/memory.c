@@ -2,6 +2,7 @@
 //  Author: Yuri Panchul
 
 #include <stdlib.h>
+#include <sys/attribs.h>
 #include <p32xxxx.h>
 
 #include "types.h"
@@ -99,7 +100,17 @@ static void region
         dump (virtual_address, size);
 }
 
-static int test_variable;
+int memory_test_variable;
+
+__ramfunc__ int memory_test_ramfunc (int a, int b)
+{
+    return a * b;
+}
+
+__longramfunc__ int memory_test_longramfunc (int a, int b)
+{
+    return memory_test_ramfunc (a, b);
+}
 
 void memory_report (void)
 {
@@ -246,8 +257,15 @@ void memory_report (void)
         no_optional_data_partitions ? 0 : BMXDRMSZ - BMXDUPBA
     );
 
-    printf ("\nTest function : %8x\n", (uint) memory_report);
-    printf ("Test variable : %8x\n", (uint) & test_variable);
+    printf ("\n");
+    printf ("Test function : default      : %8x\n", (uint) memory_report    );
+    printf ("Test function : ramfunc      : %8x\n", (uint) memory_test_ramfunc     );
+    printf ("Test function : longramfunc  : %8x\n", (uint) memory_test_longramfunc );
+    printf ("\n");
+    printf ("Calling memory_test_longramfunc (2, 3) : %d\n", memory_test_longramfunc (2, 3));
+    printf ("\n");
+    printf ("Test variable : %8x\n", (uint) & memory_test_variable);
+    printf ("\n");
 
     printf ("****************************************\n");
 }
