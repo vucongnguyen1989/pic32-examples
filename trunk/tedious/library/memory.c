@@ -21,7 +21,7 @@ static void dump (uint virtual_address, uint size)
     uint * p            = start;
     uint   n;
 
-    printf ("\n");
+    printf ("\nDump:   ");
 
     for (;;)
     {
@@ -50,7 +50,7 @@ static void dump (uint virtual_address, uint size)
 
         if (++ column == max_columns)
         {
-            printf ("\n");
+            printf ("\n        ");
             column = 0;
         }
 
@@ -78,16 +78,25 @@ static void region
 
     printf ("%-40s  ", name);
 
-    if (size == 0)
-        printf ("                                            none\n");
+    if ((virtual_address & 0x80000000) == 0)
+        printf ("kuseg   ");
     else
+        printf ("kseg%d   ", (virtual_address >> 29) & 3);
+
+    if (size == 0)
+    {
+        printf ("                                            none\n");
+    }
+    else
+    {
         printf ("%08x-%08x  %08x-%08x  %10u  %7u KB\n",
             virtual_address,  virtual_address  + size - 1,
             physical_address, physical_address + size - 1,
             size, size / 1024);
+    }
 
-    // if (size > 0 && size < 1024 * 1024)
-    //     dump (virtual_address, size);
+    if (size > 0 && size < 1024 * 1024)
+        dump (virtual_address, size);
 }
 
 static int test_variable;
@@ -147,7 +156,7 @@ void memory_report (void)
 
     no_optional_data_partitions = (BMXDKPBA == 0) || (BMXDUDBA == 0) || (BMXDUPBA == 0);
 
-    printf ("                                          Virtial            Physical                 Size\n");
+    printf ("                                                  Virtual            Physical                 Size\n");
 
     region
     (
@@ -155,14 +164,6 @@ void memory_report (void)
         "Boot Flash",
         0xBFC00000,
         BMXBOOTSZ
-    );
-
-    region
-    (
-        true,
-        "Kernel Program Flash non-cacheable",
-        0xBD000000,
-        BMXPUPBA == 0 ? BMXPFMSZ : BMXPUPBA
     );
 
     region
@@ -176,7 +177,15 @@ void memory_report (void)
     region
     (
         true,
-        "Kernel Data RAM - kseg0",
+        "Kernel Program Flash non-cacheable",
+        0xBD000000,
+        BMXPUPBA == 0 ? BMXPFMSZ : BMXPUPBA
+    );
+
+    region
+    (
+        true,
+        "Kernel Data RAM",
         0x80000000,
         no_optional_data_partitions ? BMXDRMSZ : BMXDKPBA
     );
@@ -184,7 +193,7 @@ void memory_report (void)
     region
     (
         true,
-        "Kernel Data RAM - kseg1",
+        "Kernel Data RAM",
         0xA0000000,
         no_optional_data_partitions ? BMXDRMSZ : BMXDKPBA
     );
@@ -192,7 +201,7 @@ void memory_report (void)
     region
     (
         true,
-        "Kernel Program RAM - kseg0",
+        "Kernel Program RAM",
         0x80000000 + BMXDKPBA,
         no_optional_data_partitions ? 0 : BMXDUDBA - BMXDKPBA
     );
@@ -200,7 +209,7 @@ void memory_report (void)
     region
     (
         true,
-        "Kernel Program RAM - kseg1",
+        "Kernel Program RAM",
         0xA0000000 + BMXDKPBA,
         no_optional_data_partitions ? 0 : BMXDUDBA - BMXDKPBA
     );
