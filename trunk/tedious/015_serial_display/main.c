@@ -18,8 +18,6 @@
 #define sign   0xe
 #define equal  0xf
 
-#if 0
-
 uchar * calculator (uchar in)
 {
     static uchar buf [32];
@@ -38,10 +36,7 @@ uchar * calculator (uchar in)
         n = arg2 * 10 + in;
 
         if ((n - in) / 10 != arg2)
-        {
-            strcpy (buf + 1, " *** overflow *** ");
-            return buf;
-        }
+            goto OVERFLOW;
 
         arg2 = n;
     }
@@ -59,129 +54,99 @@ uchar * calculator (uchar in)
         {
             default:
 
-                strcpy (buf, " *** internal error *** ");
-                break;
+                goto INTERNAL_ERROR;
 
             case add:
 
-                buf [0] = '\0';
+                n = arg1 + arg2;
 
-                if (arg1 != 0 && arg2 != 0)
+                if (    arg1 > 0 && arg2 > 0 && n < 0
+                     || arg1 < 0 && arg2 < 0 && n > 0)
                 {
-                    n = arg1 + arg2;
-
-                    strcpy (" = ");
-
-                    itoa (n, buf + 3, 10);
-
-                    arg1 = n;
-                    arg2 = 0;
-
-                    strcat (buf, " ");
+                    goto OVERFLOW;
                 }
 
-                strcat (buf, "+");
                 break;
 
-            case sub   :
-            case mul   :
-            case div   :
-            case equal :
+            case sub:
 
-                ;
+                arg2 = - arg2;
+
+                n = arg1 + arg2;
+
+                if (    arg1 > 0 && arg2 > 0 && n < 0
+                     || arg1 < 0 && arg2 < 0 && n > 0)
+                {
+                    goto OVERFLOW;
+                }
+
+                break;
+
+            case mul:
+
+                n = arg1 * arg2;
+
+                if (n / arg2 != arg1)
+                    goto OVERFLOW;
+
+                break;
+
+            case div:
+
+                n = arg1 / arg2;
+
+                if (n * arg2 != arg1)
+                    goto OVERFLOW;
+
+                break;
+
+            case equal:
+
+                n = arg2;
+                break;
         }
+
+        strcpy (buf, " = ");
+
+        itoa (n, buf + strlen (buf), 10);
+
+        arg1 = n;
+        arg2 = 0;
+
+        strcat (buf, " ");
 
         switch (in)
         {
-            default:
-
-                strcpy (buf, " *** bad input *** ");
-                break;
-
-            case add: in = '+';strcat (buf, "+")
-
-                buf [0] = '\0';
-
-                if (arg1 != 0 && arg2 != 0)
-                {
-                    n = arg1 + arg2;
-
-                    strcpy (" = ");
-
-                    itoa (n, buf + 3, 10); break;
-
-                    arg1 = n;
-                    arg2 = 0;
-
-                    strcat (buf, " ");
-                }
-
-                strcat (buf, "+");
-                break;
-
-            case sub   :
-            case mul   :
-            case div   :
-            case equal :
-
-                ;
+            default:     goto INTERNAL_ERROR;
+            case add:    strcat (buf, "+"); break;
+            case sub:    strcat (buf, "-"); break;
+            case mul:    strcat (buf, "*"); break;
+            case div:    strcat (buf, "/"); break;
+            case equal:  break;
         }
 
         op = in;
     }
 
-    switch (in)
-    {
-        default:
+    return buf;
 
-            strcpy (buf, " *** bad input *** ");
-            break;
+    OVERFLOW:
 
-        case 0: case 1: case 2: case 3: case 4:
-        case 5: case 6: case 7: case 8: case 9:
+    strcat (buf, " *** overflow *** ");
+    goto RESET;
 
-            buf [0] = '0' + in;
-            buf [1] = '\0';
+    INTERNAL_ERROR:
 
-            n = arg2 * 10 + in;
+    strcat (buf, " *** internal error *** ");
+    goto RESET;
 
-            if ((n - in) / 10 != arg2)
-            {
-                strcpy (buf + 1, " *** overflow *** ");
-                break;
-            }
+    RESET:
 
-            arg2 = arg2 * 10 + in;
-            break;
-
-        case 0xa:  // +
-
-
-    }
+    arg1 = 0;
+    arg2 = 0;
+    op   = add;
 
     return buf;
-}
-
-void run (void)
-{
-    int i;
-
-    for (i = 0; i < 400000; i++)
-    {
-        uchar c = keypad_get ();
-
-        if (c == 0)
-            display_new_line ();
-        else
-            display_hex_digit (c);
-    }
-}
-
-#endif
-
-void _mon_putc (char c)
-{
-   uart_put_char ((uchar) c);
 }
 
 void main (void)
@@ -192,16 +157,6 @@ void main (void)
     display_init ();
     keypad_init  (true);  // use_interrupts
 
-    uart_init (9600);
-
-    __C32_UART = 1;
-
-    memory_report ();
-
-    for (;;);
-
-    return;
-
-//    for (;;)
-//        display_str (calculator (keypad_get ());
+    for (;;)
+        display_str (calculator (keypad_get ()));
 }
