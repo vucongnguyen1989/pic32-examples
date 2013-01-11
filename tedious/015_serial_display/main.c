@@ -44,9 +44,9 @@ uchar * calculator (uchar in)
     {
         arg2 = - arg2;
 
-        buf [0] = ' ';
+        strcpy (buf, " = ");
         itoa (arg2, buf + 1, 10);
-        strcat (buf, ' ');
+        strcat (buf, " ");
     }
     else
     {
