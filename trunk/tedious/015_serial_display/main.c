@@ -18,6 +18,25 @@
 #define sign   0xe
 #define equal  0xf
 
+static void calculator_itoa (int n, uchar * buf)
+{
+    uint i;
+
+    if (n < 0)
+    {
+        * buf ++ = '-';
+        n = - n;
+    }
+
+    for (i = 1000 * 1000 * 1000; i >= 1; i /= 10)
+    {
+        if (n >= i || i == 1)
+            * buf ++ = '0' + n / i % 10;
+    }
+
+    * buf = '\0';
+}
+
 uchar * calculator (uchar in)
 {
     static uchar buf [32];
@@ -44,9 +63,8 @@ uchar * calculator (uchar in)
     {
         arg2 = - arg2;
 
-        strcpy (buf, " = ");
-        itoa (arg2, buf + 1, 10);
-        strcat (buf, " ");
+        buf [0] = '=';
+        calculator_itoa (arg2, buf + 1);
     }
     else
     {
@@ -86,34 +104,31 @@ uchar * calculator (uchar in)
 
                 n = arg1 * arg2;
 
-                if (n / arg2 != arg1)
+                if (arg2 != 0 && n / arg2 != arg1)
                     goto OVERFLOW;
 
                 break;
 
             case div:
 
-                n = arg1 / arg2;
-
-                if (n * arg2 != arg1)
+                if (arg2 == 0)
                     goto OVERFLOW;
 
+                n = arg1 / arg2;
                 break;
 
             case equal:
 
-                n = arg2;
+                n = 0;
                 break;
         }
 
-        strcpy (buf, " = ");
+        buf [0] = '=';
 
-        itoa (n, buf + strlen (buf), 10);
+        calculator_itoa (n, buf + 1);
 
         arg1 = n;
         arg2 = 0;
-
-        strcat (buf, " ");
 
         switch (in)
         {
@@ -132,12 +147,12 @@ uchar * calculator (uchar in)
 
     OVERFLOW:
 
-    strcat (buf, " *** overflow *** ");
+    strcat (buf, "[overflow]");
     goto RESET;
 
     INTERNAL_ERROR:
 
-    strcat (buf, " *** internal error *** ");
+    strcat (buf, "[internal error]");
     goto RESET;
 
     RESET:
