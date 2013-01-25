@@ -6,18 +6,18 @@
 
 #include "types.h"
 
-void  spi_init           (uint baud);
+void spi_init           (uint baud);
 
-uchar spi_put_get_char   (uchar c);
+char spi_put_get_char   (char c);
 
-uchar spi_get_char       (void);
+char spi_get_char       (void);
 
-void  spi_put_char       (uchar   c);
-void  spi_put_new_line   (void     );
-void  spi_put_str        (uchar * s);
-void  spi_put_dec        (uint    n);
-void  spi_put_hex_digit  (uint    n);
-void  spi_put_hex_byte   (uchar   n);
-void  spi_put_hex        (uint    n);
+void spi_put_char       (char   c);
+void spi_put_new_line   (void    );
+void spi_put_str        (char * s);
+void spi_put_dec        (uint   n);
+void spi_put_hex_digit  (uint   n);
+void spi_put_hex_byte   (char   n);
+void spi_put_hex        (uint   n);
 
 #endif

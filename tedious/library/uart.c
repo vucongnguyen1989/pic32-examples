@@ -21,13 +21,13 @@ void uart_init (uint baud)
     uart_put_new_line  ();
 }
 
-uchar uart_get_char (void)
+char uart_get_char (void)
 {
     while (! U1STAbits.URXDA);  // wait until data is available
     return U1RXREG;             // return received character over UART
 }
 
-void uart_put_char (uchar c)
+void uart_put_char (char c)
 {
     while (U1STAbits.UTXBF);  // wait until transmit buffer empty
     U1TXREG = c;              // transmit character over UART
@@ -39,7 +39,7 @@ void uart_put_new_line (void)
     uart_put_char ('\n');
 }
 
-void uart_put_str (uchar *s)
+void uart_put_str (char * s)
 {
     while (*s != '\0')
         uart_put_char (*s++);
@@ -58,7 +58,7 @@ void uart_put_dec (uint n)
 
 void uart_put_hex_digit (uint n)
 {
-    uchar c;
+    char c;
 
     c  = n & 0x0f;
     c += c >= 10 ? 'A' - 10 : '0';
@@ -66,7 +66,7 @@ void uart_put_hex_digit (uint n)
     uart_put_char (c);
 }
 
-void uart_put_hex_byte (uchar n)
+void uart_put_hex_byte (char n)
 {
     uint i;
 

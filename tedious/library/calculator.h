@@ -6,6 +6,6 @@
 
 #include "types.h"
 
-uchar * calculator (uchar in);
+char * calculator (char in);
 
 #endif

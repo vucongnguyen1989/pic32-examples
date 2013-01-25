@@ -1,6 +1,7 @@
-//  File:   main.c
+//  File:   calculator1.c
 //  Author: Yuri Panchul
 
+#include "string.h"
 #include "types.h"
 
 #define add    0xa
@@ -10,7 +11,7 @@
 #define sign   0xe
 #define equal  0xf
 
-static void calculator_itoa (int n, uchar * buf)
+static void calculator_int_to_string (int n, char * buf)
 {
     uint i;
 
@@ -29,13 +30,30 @@ static void calculator_itoa (int n, uchar * buf)
     * buf = '\0';
 }
 
-uchar * calculator (uchar in)
+static bool calculator_op_to_string (int op, char * buf)
 {
-    static uchar buf [32];
+    switch (op)
+    {
+        default:     * buf = '\0'; return false;
 
-    static int   arg1 = 0;
-    static int   arg2 = 0;
-    static int   op   = add;
+        case add:    * buf ++ = '+'; break;
+        case sub:    * buf ++ = '-'; break;
+        case mul:    * buf ++ = '*'; break;
+        case div:    * buf ++ = '/'; break;
+        case equal:  break;
+    }
+
+    * buf ++ = '\0';
+    return true;
+}
+
+char * calculator (char in)
+{
+    static char buf [32];
+
+    static int  arg1 = 0;
+    static int  arg2 = 0;
+    static int  op   = add;
 
     int n;
 
@@ -56,7 +74,15 @@ uchar * calculator (uchar in)
         arg2 = - arg2;
 
         buf [0] = '=';
-        calculator_itoa (arg2, buf + 1);
+        buf [1] = '\0';
+
+        if (! (arg1 == 0 && (op == add || op == sub)))
+            calculator_int_to_string (arg1, buf + 1);
+
+        if (! (arg1 == 0 && op == add))
+            calculator_op_to_string  (op, buf + strlen (buf));
+
+        calculator_int_to_string (arg2 , buf + strlen (buf));
     }
     else
     {
@@ -117,22 +143,15 @@ uchar * calculator (uchar in)
 
         buf [0] = '=';
 
-        calculator_itoa (n, buf + 1);
+        calculator_int_to_string (n, buf + 1);
 
         arg1 = n;
         arg2 = 0;
 
-        switch (in)
-        {
-            default:     goto INTERNAL_ERROR;
-            case add:    strcat (buf, "+"); break;
-            case sub:    strcat (buf, "-"); break;
-            case mul:    strcat (buf, "*"); break;
-            case div:    strcat (buf, "/"); break;
-            case equal:  break;
-        }
+        if (! calculator_op_to_string  (in, buf + strlen (buf)))
+            goto INTERNAL_ERROR;
 
-        op = in;
+        op = in == equal ? add : in;
     }
 
     return buf;
@@ -155,3 +174,36 @@ uchar * calculator (uchar in)
 
     return buf;
 }
+
+#ifndef __pic32mx__
+
+#include "conio.h"
+#include "ctype.h"
+#include "stdio.h"
+
+int main (void)
+{
+    int c;
+
+    for (;;)
+    {
+        c = getch ();
+
+        if (isdigit (c))
+            c -= '0';
+        else if (c >= 'a' && c <= 'f')
+            c = c - 'a' + 0xA;
+        else if (c >= 'A' && c <= 'F')
+            c = c - 'A' + 0xA;
+        else if (strchr ("xzq", c) || c == EOF)
+            break;
+        else
+            continue;
+
+        printf ("%s", calculator ((char) c));
+    }
+
+    return 0;
+}
+
+#endif

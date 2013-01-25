@@ -6,8 +6,8 @@
 
 #include "types.h"
 
-void  keypad_init     (bool use_interrupts);
-bool  keypad_try_get  (uchar * pa);
-uchar keypad_get      (void);
+void keypad_init    (bool use_interrupts);
+bool keypad_try_get (char * pa);
+char keypad_get     (void);
 
 #endif
