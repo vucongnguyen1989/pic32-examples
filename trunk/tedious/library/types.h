@@ -7,7 +7,6 @@
 typedef int bool;
 enum { true = 1, false = 0 };
 
-typedef unsigned int  uint;
-typedef unsigned char uchar;
+typedef unsigned int uint;
 
 #endif

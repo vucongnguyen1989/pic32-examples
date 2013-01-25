@@ -7,7 +7,7 @@
 #include "spi.h"
 #include "display.h"
 
-static uchar buf [16];
+static char buf [16];
 static int col;
 
 void display_init (void)
@@ -40,7 +40,7 @@ static void scroll ()
     col = 0;
 }
 
-void display_char (uchar c)
+void display_char (char c)
 {
     if (c == '\n')
     {
@@ -60,7 +60,7 @@ void display_new_line (void)
     display_char ('\n');
 }
 
-void display_str (uchar *s)
+void display_str (char *s)
 {
     while (*s != '\0')
         display_char (*s++);
@@ -79,7 +79,7 @@ void display_dec (uint n)
 
 void display_hex_digit (uint n)
 {
-    uchar c;
+    char c;
 
     c  = n & 0x0f;
     c += c >= 10 ? 'A' - 10 : '0';
@@ -87,7 +87,7 @@ void display_hex_digit (uint n)
     display_char (c);
 }
 
-void display_hex_byte (uchar n)
+void display_hex_byte (char n)
 {
     uint i;
 

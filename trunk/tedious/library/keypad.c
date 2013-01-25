@@ -25,12 +25,12 @@ static uint translation [n_rows][n_cols] =
 
 #define buf_size 1024
 
-static uchar buf [buf_size];
+static char buf [buf_size];
 static int i_put, i_get;
 
 static bool use_timer_interrupt;
 
-static bool put (uchar a)
+static bool put (char a)
 {
     int next_i_put = i_put + 1;
 
@@ -114,7 +114,7 @@ void keypad_init (bool use_interrupts)
     T1CONbits.ON     = 1;      // turn timer on
 }
 
-bool keypad_try_get (uchar * pa)
+bool keypad_try_get (char * pa)
 {
     if (i_get == i_put)
         return false;
@@ -127,9 +127,9 @@ bool keypad_try_get (uchar * pa)
     return true;
 }
 
-uchar keypad_get (void)
+char keypad_get (void)
 {
-    uchar a;
+    char a;
 
     while (! keypad_try_get (& a))
         if (! use_timer_interrupt)

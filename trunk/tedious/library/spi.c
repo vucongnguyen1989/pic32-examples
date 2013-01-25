@@ -22,19 +22,19 @@ void spi_init (uint baud)
     SPI2CONbits.ON     = 1;        // turn SPI on
 }
 
-uchar spi_put_get_char (uchar c)
+char spi_put_get_char (char c)
 {
     SPI2BUF = c;                   // send data to slave
     while (SPI2STATbits.SPIBUSY);  // wait until SPI transmission complete
     return SPI2BUF;
 }
 
-uchar spi_get_char (void)
+char spi_get_char (void)
 {
     return spi_put_get_char (0);
 }
 
-void spi_put_char (uchar c)
+void spi_put_char (char c)
 {
     (void) spi_put_get_char (c);
 }
@@ -45,7 +45,7 @@ void spi_put_new_line (void)
     spi_put_char ('\n');
 }
 
-void spi_put_str (uchar *s)
+void spi_put_str (char *s)
 {
     while (*s != '\0')
         spi_put_char (*s++);
@@ -64,7 +64,7 @@ void spi_put_dec (uint n)
 
 void spi_put_hex_digit (uint n)
 {
-    uchar c;
+    char c;
 
     c  = n & 0x0f;
     c += c >= 10 ? 'A' - 10 : '0';
@@ -72,7 +72,7 @@ void spi_put_hex_digit (uint n)
     spi_put_char (c);
 }
 
-void spi_put_hex_byte (uchar n)
+void spi_put_hex_byte (char n)
 {
     uint i;
 
