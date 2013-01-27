@@ -4,35 +4,46 @@
 #include "string.h"
 #include "types.h"
 
-#define add    0xa
-#define sub    0xb
-#define mul    0xc
-#define div    0xd
-#define sign   0xe
-#define equal  0xf
+////////////////////////////////////////////////////////////////////////////
 
-static char   buf [128];
-static char * p = buf;
+enum
+{
+    add          = 0xa,
+    substract    = 0xb,
+    multiply     = 0xc,
+    divide       = 0xd,
+    parentheses  = 0xe,
+    equal        = 0xf
+};
 
 ////////////////////////////////////////////////////////////////////////////
 
-static void int_to_string (int n, char * buf)
+static char buf [128] = "\n";
+
+#define newline_before_text  buf
+#define text_start           (buf + 1)
+
+static char * p = text_start;
+
+////////////////////////////////////////////////////////////////////////////
+
+static void int_to_string (int n, char * s)
 {
     uint i;
 
     if (n < 0)
     {
-        * buf ++ = '-';
+        * s ++ = '-';
         n = - n;
     }
 
     for (i = 1000 * 1000 * 1000; i >= 1; i /= 10)
     {
         if (n >= i || i == 1)
-            * buf ++ = '0' + n / i % 10;
+            * s ++ = '0' + n / i % 10;
     }
 
-    * buf = '\0';
+    * s = '\0';
 }
 
 ////////////////////////////////////////////////////////////////////////////
@@ -40,25 +51,6 @@ static void int_to_string (int n, char * buf)
 static bool expr1 (int * pn);
 static bool expr2 (int * pn);
 static bool expr3 (int * pn);
-
-static void expr ()
-{
-    int n;
-
-    p = buf;
-
-    if (expr1 (& n) && *p == '\0')
-    {
-        int_to_string (n, buf);
-    }
-    else
-    {
-        strcpy (buf, "error @ ");
-        int_to_string (p - buf, buf + strlen (buf));
-    }
-
-    p = buf;
-}
 
 ////////////////////////////////////////////////////////////////////////////
 
@@ -86,6 +78,8 @@ static bool expr1 (int * pn)
         n2 = - n2;
 
     n = n1 + n2;
+
+    // checking overflow
 
     if (    n1 > 0 && n2 > 0 && n < 0
          || n1 < 0 && n2 < 0 && n > 0)
@@ -123,6 +117,8 @@ static bool expr2 (int * pn)
     {
         n = n1 * n2;
  
+        // checking overflow
+
         if (n2 != 0 && n / n2 != n1)
             return false;
     }
@@ -142,7 +138,7 @@ static bool expr2 (int * pn)
 
 static bool expr3 (int * pn)
 {
-    if (* p == '-' && (p == buf || strchr ("+-*/(", p [-1])))
+    if (* p == '-' && (p == text_start || strchr ("+-*/(", p [-1])))
     {
         p ++;
 
@@ -172,6 +168,8 @@ static bool expr3 (int * pn)
             int d  = * p - '0';
             int nn = n * 10 + d;
 
+            // checking overflow
+
             if ((nn - d) / 10 != n)
                 return false;
 
@@ -191,65 +189,86 @@ static bool expr3 (int * pn)
 
 ////////////////////////////////////////////////////////////////////////////
 
-char * calculator (char in)
+char * calculator2 (char in)
 {
     if (in == equal)
     {
-        expr (buf);
-        return buf;
+        int n;
+
+        p = text_start;
+
+        if (expr1 (& n) && *p == '\0')
+        {
+            int_to_string (n, text_start);
+        }
+        else
+        {
+            strcpy (text_start, "error @ ");
+
+            int_to_string
+            (
+                p - text_start + 1,
+                text_start + strlen (text_start)
+            );
+        }
+
+        p = text_start;
+
+        return newline_before_text;
     }
 
     switch (in)
     {
-    case add  : in = '+';       break;
-    case sub  : in = '-';       break;
-    case mul  : in = '*';       break;
-    case div  : in = '/';       break;
-    case sign : in = '-';       break;
-    default   : in = '0' + in;  break;
+    case add        : in = '+'; break;
+    case substract  : in = '-'; break;
+    case multiply   : in = '*'; break;
+    case divide     : in = '/'; break;
+
+    case parentheses:
+
+        if (p == text_start || strchr ("+-*/(", p [-1]))
+            in = '(';
+        else
+            in = ')';
+
+        break;
+
+    default:
+        
+        in = '0' + in;
+        break;
     }
 
     if (p == buf + sizeof (buf) - 2)
     {
-        p = buf;
-        return "error";
+        strcpy (text_start, "buffer overflow @ ");
+
+        int_to_string
+        (
+            p - text_start + 1,
+            text_start + strlen (text_start)
+        );
+
+        return newline_before_text;
     }
 
     * p ++ = in;
     * p    = '\0';
-    return p - 1;
+
+    return p == text_start + 1 ? newline_before_text : p - 1;
 }
 
 ////////////////////////////////////////////////////////////////////////////
 
-#ifndef __pic32mx__
+#ifndef __PIC32MX
 
 #include "conio.h"
 #include "ctype.h"
 #include "stdio.h"
 
-int main1 (void)
-{
-    for (;;)
-    {
-        gets (buf);
-
-        if (* buf == '\0')
-            break;
-
-        expr (buf);
-        puts (buf);
-    }
-
-    return 0;
-}
-
-////////////////////////////////////////////////////////////////////////////
-
 int main (void)
 {
-    char   c;
-    char * nl;
+    char c;
 
     for (;;)
     {
@@ -260,17 +279,16 @@ int main (void)
 
         switch (c)
         {
-        case '+'  : c = add      ; break;
-        case '-'  : c = sub      ; break;
-        case '*'  : c = mul      ; break;
-        case '/'  : c = div      ; break;
-        case '\r' : c = equal    ; break;
-        default   : c = c - '0'  ; break;
+        case '+'  : c = add         ; break;
+        case '-'  : c = substract   ; break;
+        case '*'  : c = multiply    ; break;
+        case '/'  : c = divide      ; break;
+        case '('  : c = parentheses ; break;
+        case ')'  : c = parentheses ; break;
+        default   : c = c - '0'     ; break;
         }
 
-        nl = c == equal ? "\n" : "";
-
-        printf ("%s%s%s", nl, calculator (c), nl);
+        printf ("%s", calculator (c));
     }
 
     return 0;

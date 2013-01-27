@@ -14,12 +14,18 @@ void spi_init (uint baud)
 {
     char dummy;
 
-    SPI2CONbits.ON     = 0;        // disable SPI to reset any previous state
-    dummy              = SPI2BUF;  // clear receive buffer
-    SPI2BRG            = PBCLK_FREQUENCY / 16 / baud - 1;
-    SPI2CONbits.MSTEN  = 1;        // enable master mode
-    SPI2CONbits.CKE    = 1;        // set clock-to-data timing
-    SPI2CONbits.ON     = 1;        // turn SPI on
+    SPI2CONbits.ON      = 0;        // disable SPI to reset any previous state
+    dummy               = SPI2BUF;  // clear receive buffer
+    SPI2BRG             = PBCLK_FREQUENCY / 16 / baud - 1;
+    SPI2CONbits.MSTEN   = 1;        // enable master mode
+    SPI2CONbits.CKE     = 1;        // set clock-to-data timing
+    SPI2CONbits.ON      = 1;        // turn SPI on
+
+    TRISGbits.TRISG9    = 0;
+    PORTGbits.RG9       = 0;
+    delay_for_1000_nops_x (1000);
+    PORTGbits.RG9       = 1;
+    delay_for_1000_nops_x (1000);
 }
 
 char spi_put_get_char (char c)
