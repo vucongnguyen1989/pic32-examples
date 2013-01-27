@@ -12,8 +12,7 @@ static int col;
 
 void display_init (void)
 {
-    spi_init (9600);  // baud
-
+    spi_init (5000000);  // baud rate
     spi_put_str ("\033[1;0H");  // set cursor position to row 1 column 0
 
     memset (buf, ' ', sizeof (buf));

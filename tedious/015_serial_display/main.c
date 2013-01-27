@@ -20,6 +20,8 @@ void main (void)
     display_init ();
     keypad_init  (true);  // use_interrupts
 
+    display_str ("Calculator\n");
+
     for (;;)
-        display_str (calculator (keypad_get ()));
+        display_str (calculator2 (keypad_get ()));
 }

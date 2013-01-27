@@ -47,7 +47,7 @@ static bool calculator_op_to_string (int op, char * buf)
     return true;
 }
 
-char * calculator (char in)
+char * calculator1 (char in)
 {
     static char buf [32];
 
@@ -175,7 +175,7 @@ char * calculator (char in)
     return buf;
 }
 
-#ifndef __pic32mx__
+#ifndef __PIC32MX
 
 #include "conio.h"
 #include "ctype.h"
