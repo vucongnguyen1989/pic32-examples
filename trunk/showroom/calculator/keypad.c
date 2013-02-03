@@ -37,6 +37,8 @@ static bool put (char a)
     if (next_i_put == buf_size)
         next_i_put = 0;
 
+    // Checking buffer overflow
+
     if (next_i_put == i_get)
         return false;
 

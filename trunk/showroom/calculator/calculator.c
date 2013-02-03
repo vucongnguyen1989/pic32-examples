@@ -5,6 +5,18 @@
 
 #include "types.h"
 
+//
+//  This code uses short identifiers, static fixed sized buffers,
+//  no C++ features (like namespaces), no consideration about portability etc.
+//  The reason is straightforward: this code is intended to be a very small
+//  easy to read example that is a part of a small program that illustrates
+//  the features of a microcontroller.
+//
+//  This code is neither a part of a large industrial project
+//  nor an example how to write portable reusable code.
+//  Therefore: less text = easier to read.
+//
+
 ////////////////////////////////////////////////////////////////////////////
 
 enum
@@ -28,6 +40,13 @@ static char * cur = text_start;
 
 ////////////////////////////////////////////////////////////////////////////
 
+//
+//  int_to_string is my alternative to itoa. I wrote int_to_string
+//  because itoa did not work for me in MPLAB X PIC32 package.
+//  itoa is also not an ANSI/ISO standard function and is not re-enterant.
+//  Yes, I am aware that "i = 1000 * 1000 * 1000" is not portable.
+//
+
 static void int_to_string (int n, char * s)
 {
     uint i;
@@ -48,6 +67,12 @@ static void int_to_string (int n, char * s)
 }
 
 ////////////////////////////////////////////////////////////////////////////
+
+//
+//  The expression parser / evaluator is implemented using simple top-down
+//  recursion. A more reliable and table-driven way would be to write
+//  a bottom-up operator precedence parser.
+//
 
 static bool expr1 (int * pn);
 static bool expr2 (int * pn);

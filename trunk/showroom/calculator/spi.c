@@ -21,6 +21,10 @@ void spi_init (uint baud)
     SPI2CONbits.CKE     = 1;        // set clock-to-data timing
     SPI2CONbits.ON      = 1;        // turn SPI on
 
+    // Signal G9 is on the same pin as SPI2SS (Slave Select) signal.
+    // Since slave select is not used in this configuration
+    // the pin is used as a reset signal for the external SPI slave.
+
     TRISGbits.TRISG9    = 0;
     PORTGbits.RG9       = 0;
     delay_for_1000_nops_x (1000);

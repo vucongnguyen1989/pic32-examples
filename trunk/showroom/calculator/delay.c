@@ -26,6 +26,12 @@ void delay_for_1000_nops (void)
     delay_for_1000_nops_x (1);
 }
 
+//
+//  Note that this code explicitly uses PIC32 Timer 1.
+//  If another part of the code uses the same timer for interrupts
+//  they will be in conflict.
+//
+
 void delay_micros (uint n)
 {
     const uint function_overhead = 6;
