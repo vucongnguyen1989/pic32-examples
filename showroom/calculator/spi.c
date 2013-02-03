@@ -5,6 +5,16 @@
 //  Digital Design and Computer Architecture, Second Edition
 //  by David Harris & Sarah Harris
 
+//
+//  All pins in this code are hardcoded since it is intended to be
+//  a very small easy to read example that is a part of a small program
+//  that illustrates the features of a microcontroller.
+//
+//  This code is neither a part of a large industrial project
+//  nor an example how to write portable reusable code.
+//  Therefore: less text = easier to read and to follow.
+//
+
 #include <p32xxxx.h>
 
 #include "config.h"
