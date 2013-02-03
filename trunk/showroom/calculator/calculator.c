@@ -14,7 +14,7 @@
 //
 //  This code is neither a part of a large industrial project
 //  nor an example how to write portable reusable code.
-//  Therefore: less text = easier to read.
+//  Therefore: less text = easier to read and to follow.
 //
 
 ////////////////////////////////////////////////////////////////////////////
