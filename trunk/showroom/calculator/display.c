@@ -53,50 +53,8 @@ void display_char (char c)
         scroll ();
 }
 
-void display_new_line (void)
-{
-    display_char ('\n');
-}
-
 void display_str (char *s)
 {
     while (*s != '\0')
         display_char (*s++);
-}
-
-void display_dec (uint n)
-{
-    uint i;
-
-    for (i = 1000 * 1000 * 1000; i >= 1; i /= 10)
-    {
-        if (n >= i || i == 1)
-            display_char ('0' + n / i % 10);
-    }
-}
-
-void display_hex_digit (uint n)
-{
-    char c;
-
-    c  = n & 0x0f;
-    c += c >= 10 ? 'A' - 10 : '0';
-
-    display_char (c);
-}
-
-void display_hex_byte (char n)
-{
-    uint i;
-
-    for (i = 0; i < sizeof (n) * 2; i++)
-        display_hex_digit (n >> (sizeof (n) * 2 - 1 - i) * 4);
-}
-
-void display_hex (uint n)
-{
-    uint i;
-
-    for (i = 0; i < sizeof (n) * 2; i++)
-        display_hex_digit (n >> (sizeof (n) * 2 - 1 - i) * 4);
 }
