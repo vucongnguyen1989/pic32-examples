@@ -1,16 +1,11 @@
 //  File:   main.c
 //  Author: Yuri Panchul
 
-#include <p32xxxx.h>
-
 #include "calculator.h"
-#include "config.h"
-#include "delay.h"
-#include "memory.h"
+#include "display.h"
+#include "keypad.h"
 #include "running.h"
 #include "types.h"
-#include "spi.h"
-#include "uart.h"
 
 void main (void)
 {
@@ -23,5 +18,5 @@ void main (void)
     display_str ("Calculator");
 
     for (;;)
-        display_str (calculator2 (keypad_get ()));
+        display_str (calculator (keypad_get ()));
 }

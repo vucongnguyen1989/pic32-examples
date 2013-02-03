@@ -1,4 +1,4 @@
-//  File:   calculator2.c
+//  File:   calculator.c
 //  Author: Yuri Panchul
 
 #include <string.h>
@@ -190,7 +190,7 @@ static bool expr3 (int * pn)
 
 ////////////////////////////////////////////////////////////////////////////
 
-char * calculator2 (char in)
+char * calculator (char in)
 {
     static char prev_in = equal;
 
