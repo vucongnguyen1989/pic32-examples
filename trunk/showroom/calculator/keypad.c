@@ -87,7 +87,7 @@ static void keypad_poll ()
 
 void __attribute__ ((interrupt (IPL7))) __attribute__ ((vector (4))) keypad_timer (void)
 {
-    poll ();
+    keypad_poll ();
     IFS0bits.T1IF = 0;
 }
 
