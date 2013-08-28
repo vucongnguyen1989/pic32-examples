@@ -44,17 +44,20 @@
 /*				Include File Definitions						*/
 /* ------------------------------------------------------------ */
 
-#include <stdlib.h>
-#include <string.h>
-#include <inttypes.h>
-
+// #include <WProgram.h>  // Yuri Panchul: I commented it out
 #include <p32xxxx.h>
 #include <plib.h>
 
-// YURI
+// Yuri Panchul: begin
+
+#include <inttypes.h>
+#include <stdlib.h>
+#include <string.h>
 
 #define _BOARD_UNO_
 #define delay delay_millis
+
+// Yuri Panchul: end
 
 #include "OledDriver.h"
 #include "OledChar.h"
