@@ -18,7 +18,7 @@ void display_init (void)
     col = 0;
 }
 
-static void display_scroll ()
+static void scroll ()
 {
     int i;
 
@@ -42,7 +42,7 @@ void display_char (char c)
 {
     if (c == '\n')
     {
-        display_scroll ();
+        scroll ();
         return;
     }
 
@@ -50,7 +50,7 @@ void display_char (char c)
     buf [col ++] = c;
 
     if (col == sizeof (buf))
-        display_scroll ();
+        scroll ();
 }
 
 void display_new_line (void)
