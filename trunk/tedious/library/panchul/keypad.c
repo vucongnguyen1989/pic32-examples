@@ -30,7 +30,7 @@ static int i_put, i_get;
 
 static bool use_timer_interrupt;
 
-static bool keypad_put (char a)
+static bool put (char a)
 {
     int next_i_put = i_put + 1;
 
@@ -46,7 +46,7 @@ static bool keypad_put (char a)
     return true;
 }
 
-static void keypad_poll ()
+static void poll ()
 {
     int row, col;
     int in;
@@ -62,7 +62,7 @@ static void keypad_poll ()
             in <<= 1;
 
             if (on && ! matrix [row][col])
-                keypad_put (translation [row][col]);
+                put (translation [row][col]);
 
             matrix [row][col] = on;
         }
@@ -133,7 +133,7 @@ char keypad_get (void)
 
     while (! keypad_try_get (& a))
         if (! use_timer_interrupt)
-            keypad_poll ();
+            poll ();
 
     return a;
 }
