@@ -1,4 +1,4 @@
-//  File:   flash_cache.c
+//  File:   prefetch_cache.c
 //  Author: Yuri Panchul
 
 #include <sys/attribs.h>
@@ -8,15 +8,15 @@
 
 #include "config.h"
 #include "types.h"
-// #include "flash_cache.h"
+// #include "prefetch_cache.h"
 
 //--------------------------------------------------------------------
 
-void flash_cache_report (void)
+void prefetch_cache_report (void)
 {
     int i;
 
-    printf ("*********  Flash cache report  *********\n");
+    printf ("*********  prefetch cache report  *********\n");
 
     printf ("\nCache Coherency setting on a PFM Program Cycle bit:\n"
             "    %s\n\n",
@@ -88,7 +88,7 @@ void flash_cache_report (void)
     printf ("    Prefetch Abort : %10d\n", CHEPFABT  );
 
     printf ("\n");
-    printf ("******  End of flash cache report  *****\n\n");
+    printf ("******  End of prefetch cache report  *****\n\n");
 }
 
 //--------------------------------------------------------------------
@@ -191,7 +191,7 @@ void main_test ()
     sram_time = after - before;
 
     check_sorting_results ();
-    flash_cache_report();
+    prefetch_cache_report();
 
     CHEHIT   = 0;
     CHEMIS   = 0;
@@ -208,7 +208,7 @@ void main_test ()
     flash_time = after - before;
 
     check_sorting_results ();
-    flash_cache_report();
+    prefetch_cache_report();
 
     printf ("Relative execution time: sram  %u / flash %u = %.3g\n",
             sram_time, flash_time, (double) sram_time / flash_time);
@@ -236,7 +236,7 @@ void main ()
     printf ("sort_working_in_sram  : %.8X\n", sort_working_in_sram);
     printf ("sort_working_in_flash : %.8X\n", sort_working_in_flash);
 
-    flash_cache_report();
+    prefetch_cache_report();
 
     main_test ();
     
