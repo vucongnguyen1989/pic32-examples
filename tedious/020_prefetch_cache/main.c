@@ -114,10 +114,23 @@ void test_one_function (int (* f) (void), char * name)
 {
     unsigned double_clock_cycles;
     int result;
+    int i;
+
+    // Clear all cache statistics
 
     CHEHIT   = 0;
     CHEMIS   = 0;
     CHEPFABT = 0;
+
+    // Invalidate all cache lines (does not work with some PIC32s)
+
+    for (i = 0; i < 16; i++)
+    {
+        CHEACC            = 0x80000000 /* Writable */ | i;
+        CHETAGbits.LVALID = 0;
+    }
+
+    // Clear counter
 
     _CP0_SET_COUNT (0);
 
@@ -134,11 +147,11 @@ void test_one_function (int (* f) (void), char * name)
 
     // printf ("%-58.58s  %10u\n", name, double_clock_cycles);
 
-    printf ("%4d  %-60.60s  %10u\n",
-        test_big_iteration, name, double_clock_cycles);
+    printf ("%-60.60s  %4d  %10u\n",
+        name, test_big_iteration, double_clock_cycles);
 
     check_sorting_results ();
-    // prefetch_cache_report();
+    // prefetch_cache_report (false);
 }
 
 #define TEST(f)  test_one_function (f, #f);
