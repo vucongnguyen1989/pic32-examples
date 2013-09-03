@@ -1,10 +1,14 @@
-//  File:   prefetch_cache.c
+//  File:   main.c
 //  Author: Yuri Panchul
+
+//  I am using optimization level 1 for these measurements
 
 #include <sys/attribs.h>
 #include <p32xxxx.h>
 #include <plib.h>
 #include <xc.h>
+
+#include <stdio.h>
 
 #include "config.h"
 #include "types.h"
@@ -12,64 +16,78 @@
 
 //--------------------------------------------------------------------
 
-#define REPEAT 100
+#define REPEAT 1000
 #define N      16
 
-const int fa [N]
+const volatile int fa [N]
     = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 };
 
-int a [N];
+volatile int a [N];
 
 //--------------------------------------------------------------------
 
-__longramfunc__ void sort_working_in_sram ()
+__longramfunc__ int sort_working_in_ram (void)
 {
-    int i, j, k;
+    #include "sort.inc"
 
-    for (k = 0; k < REPEAT; k ++)
-    {
-        for (i = 0; i < N; i ++)
-            a [i] = fa [i];
-        
-        for (j = 0; j < N - 1; j ++)
-        {
-            for (i = 0; i < N - j - 1; i ++)
-            {
-                if (a [i] < a [i + 1])
-                {
-                    int t     = a [i];
-                    a [i]     = a [i + 1];
-                    a [i + 1] = t;
-                }
-            }
-        }
-    }
+    return 0;
+}
+
+__longramfunc__ int sum_using_for_loop_working_in_ram_using_ram_data (void)
+{
+    #include "sum_using_for_loop.inc"
+}
+
+__longramfunc__ int sum_using_for_loop_working_in_ram_using_flash_data (void)
+{
+    const volatile int * a = fa;
+
+    #include "sum_using_for_loop.inc"
+}
+
+__longramfunc__ int sum_using_flat_sequence_working_in_ram_using_ram_data (void)
+{
+    #include "sum_using_flat_sequence.inc"
+}
+
+__longramfunc__ int sum_using_flat_sequence_working_in_ram_using_flash_data (void)
+{
+    const volatile int * a = fa;
+
+    #include "sum_using_flat_sequence.inc"
 }
 
 //--------------------------------------------------------------------
 
-void sort_working_in_flash ()
+int sort_working_in_flash (void)
 {
-    int i, j, k;
+    #include "sort.inc"
 
-    for (k = 0; k < REPEAT; k ++)
-    {
-        for (i = 0; i < N; i ++)
-            a [i] = fa [i];
-        
-        for (j = 0; j < N - 1; j ++)
-        {
-            for (i = 0; i < N - j - 1; i ++)
-            {
-                if (a [i] < a [i + 1])
-                {
-                    int t     = a [i];
-                    a [i]     = a [i + 1];
-                    a [i + 1] = t;
-                }
-            }
-        }
-    }
+    return 0;
+}
+
+int sum_using_for_loop_working_in_flash_using_ram_data (void)
+{
+    #include "sum_using_for_loop.inc"
+}
+
+int sum_using_for_loop_working_in_flash_using_flash_data (void)
+{
+    const volatile int * a = fa;
+
+    #include "sum_using_for_loop.inc"
+}
+
+int sum_using_flat_sequence_working_in_flash_using_ram_data (void)
+{
+    #include "sum_using_flat_sequence.inc"
+}
+
+int sum_using_flat_sequence_working_in_flash_using_flash_data (void)
+{
+    const volatile int * a = fa;
+
+    #include "sum_using_flat_sequence.inc"
 }
 
 //--------------------------------------------------------------------
@@ -90,59 +108,57 @@ void check_sorting_results ()
 
 //--------------------------------------------------------------------
 
-void main_test ()
+void test_one_function (int (* f) (void), char * name)
 {
-    unsigned before, after;
-    unsigned sram_time, flash_time;
+    unsigned double_clock_cycles;
+    int result;
 
     CHEHIT   = 0;
     CHEMIS   = 0;
     CHEPFABT = 0;
 
     _CP0_SET_COUNT (0);
-    before = _CP0_GET_COUNT ();
-    sort_working_in_sram ();
-    after  = _CP0_GET_COUNT ();
 
-    printf ("Sorting in SRAM  (in double clock cycles) : %10u - %10u = %10u\n",
-        after, before, after - before);
+    // printf ("Check counter: %10u\n", _CP0_GET_COUNT ());
 
-    sram_time = after - before;
+    double_clock_cycles = _CP0_GET_COUNT ();
+    result = f ();
+    double_clock_cycles = _CP0_GET_COUNT () - double_clock_cycles;
 
-    check_sorting_results ();
-    prefetch_cache_report();
+    // printf ("%-60.60s : address : %.8X", name, (unsigned) f);
 
-    CHEHIT   = 0;
-    CHEMIS   = 0;
-    CHEPFABT = 0;
+    // printf (" : result : %10u : double clock cycles : %10u\n",
+    //     result, double_clock_cycles);
 
-    _CP0_SET_COUNT (0);
-    before = _CP0_GET_COUNT ();
-    sort_working_in_flash ();
-    after  = _CP0_GET_COUNT ();
-
-    printf ("Sorting in Flash (in double clock cycles) : %10u - %10u = %10u\n",
-        after, before, after - before);
-
-    flash_time = after - before;
+    printf ("%-58.58s  %10u\n", name, double_clock_cycles);
 
     check_sorting_results ();
-    prefetch_cache_report();
+    // prefetch_cache_report();
+}
 
-    printf ("Relative execution time: sram  %u / flash %u = %.3g\n",
-            sram_time, flash_time, (double) sram_time / flash_time);
+#define TEST(f)  test_one_function (f, #f);
 
-    printf ("Relative execution time: flash %u / sram  %u = %.3g\n",
-            flash_time, sram_time, (double) flash_time / sram_time);
+//--------------------------------------------------------------------
+
+void test_all_functions ()
+{
+    TEST ( sort_working_in_ram                                       );
+    TEST ( sum_using_for_loop_working_in_ram_using_ram_data          );
+    TEST ( sum_using_for_loop_working_in_ram_using_flash_data        );
+    TEST ( sum_using_flat_sequence_working_in_ram_using_ram_data     );
+    TEST ( sum_using_flat_sequence_working_in_ram_using_flash_data   );
+    TEST ( sort_working_in_flash                                     );
+    TEST ( sum_using_for_loop_working_in_flash_using_ram_data        );
+    TEST ( sum_using_for_loop_working_in_flash_using_flash_data      );
+    TEST ( sum_using_flat_sequence_working_in_flash_using_ram_data   );
+    TEST ( sum_using_flat_sequence_working_in_flash_using_flash_data );
 }
 
 //--------------------------------------------------------------------
 
 void main ()
 {
-    int pass;
-
-    unsigned before, after;
+    bool alternative_way = true;
 
     __C32_UART = 1;
 
@@ -151,24 +167,43 @@ void main ()
     printf ("**********************************************************************\n");
     printf ("**********************************************************************\n");
     printf ("**********************************************************************\n");
+    printf ("*                                                                    *\n");
+    printf ("*       %s                                                  *\n", __DATE__);
+    printf ("*       %s                                                     *\n", __TIME__);
+    printf ("*                                                                    *\n");
+    printf ("**********************************************************************\n");
 
-    printf ("sort_working_in_sram  : %.8X\n", sort_working_in_sram);
-    printf ("sort_working_in_flash : %.8X\n", sort_working_in_flash);
+    printf ("**********************************************************************\n");
+    printf ("*                                                                    *\n");
+    printf ("*       Default state                                                *\n");
+    printf ("*                                                                    *\n");
+    printf ("**********************************************************************\n");
 
-    prefetch_cache_report();
-
-    main_test ();
+    test_all_functions ();
     
-    // Let's enable prefetch
+    printf ("**********************************************************************\n");
+    printf ("*                                                                    *\n");
+    printf ("*       Prefetch enabled, cache disabled                             *\n");
+    printf ("*                                                                    *\n");
+    printf ("**********************************************************************\n");
+
     CHECONbits.PREFEN = 3;
 
-    main_test ();
+    test_all_functions ();
 
-    // Let's disable prefetch
+    printf ("**********************************************************************\n");
+    printf ("*                                                                    *\n");
+    printf ("*       Prefetch disabled, cache enabled                             *\n");
+    printf ("*                                                                    *\n");
+    printf ("**********************************************************************\n");
+
     CHECONbits.PREFEN = 0;
 
-    // Now let's make KSEG0 cacheable and repeat
-
+    if (alternative_way)
+    {
+        CheKseg0CacheOn ();
+    }
+    else
     {
         unsigned config = _mfc0 (_CP0_CONFIG, _CP0_CONFIG_SELECT);
 
@@ -178,12 +213,44 @@ void main ()
         _mtc0 (_CP0_CONFIG, _CP0_CONFIG_SELECT, config);
     }
 
-    main_test ();
+    test_all_functions ();
 
-    // Let's enable prefetch
+    printf ("**********************************************************************\n");
+    printf ("*                                                                    *\n");
+    printf ("*       Prefetch enabled, cache enabled                              *\n");
+    printf ("*                                                                    *\n");
+    printf ("**********************************************************************\n");
+
     CHECONbits.PREFEN = 3;
 
-    main_test ();
+    test_all_functions ();
+
+    printf ("**********************************************************************\n");
+    printf ("*                                                                    *\n");
+    printf ("*       Enable data caching                                          *\n");
+    printf ("*                                                                    *\n");
+    printf ("**********************************************************************\n");
+
+    CHECONbits.DCSZ = 3;  // Enable data caching with a size of 4 Lines
+
+    test_all_functions ();
+
+    printf ("**********************************************************************\n");
+    printf ("*                                                                    *\n");
+    printf ("*       Set zero state data RAM access                               *\n");
+    printf ("*                                                                    *\n");
+    printf ("**********************************************************************\n");
+
+    if (alternative_way)
+        mBMXDisableDRMWaitState ();
+    else
+        BMXCONbits.BMXWSDRM = 0;
+
+    test_all_functions ();
+
+    printf ("**********************************************************************\n");
+    printf ("**********************************************************************\n");
+    printf ("**********************************************************************\n");
 
     for (;;);
 }

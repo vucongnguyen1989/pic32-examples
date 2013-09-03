@@ -7,4 +7,5 @@
 #include "types.h"
 
 void prefetch_cache_report (bool dump_cache_lines);
+
 #endif

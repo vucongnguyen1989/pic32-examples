@@ -1,8 +1,12 @@
 //  File:   sum_using_flat_sequence.inc
 //  Author: Yuri Panchul
 
+#if N != 16
+    #error N != 16
+#endif
+
 #define FLAT_SEQUENCE                        \
-    n =                                      \
+    n +=                                     \
           a [ 0] + a [ 1] + a [ 2] + a [ 3]  \
         + a [ 4] + a [ 5] + a [ 6] + a [ 7]  \
         + a [ 8] + a [ 9] + a [10] + a [11]  \
@@ -11,9 +15,12 @@
 {
     int i, k, n = 0;
 
+    #if REPEAT % 8 != 0
+        #error REPEAT % 8 != 0
+    #endif
+
     for (k = 0; k < REPEAT / 8; k ++)
     {
-
         FLAT_SEQUENCE
         FLAT_SEQUENCE
         FLAT_SEQUENCE
