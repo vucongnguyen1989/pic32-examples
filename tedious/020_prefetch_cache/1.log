@@ -1,0 +1,102 @@
+UART: Peripheral bus: 20000000 Hz, baud rate: 9600
+******************************************************************************
+******************************************************************************
+******************************************************************************
+*                                                                            *
+*       Sep  2 2013                                                          *
+*       20:31:55                                                             *
+*                                                                            *
+******************************************************************************
+******************************************************************************
+*                                                                            *
+*       Default state                                                        *
+*                                                                            *
+******************************************************************************
+sort_working_in_ram                                              0     2819022
+sum_using_for_loop_working_in_ram_using_ram_data                 0      101021
+sum_using_for_loop_working_in_ram_using_flash_data               0      101021
+sum_using_flat_sequence_working_in_ram_using_ram_data            0       66603
+sum_using_flat_sequence_working_in_ram_using_flash_data          0       66603
+sort_working_in_flash                                            0    11036052
+sum_using_for_loop_working_in_flash_using_ram_data               0      404048
+sum_using_for_loop_working_in_flash_using_flash_data             0      404048
+sum_using_flat_sequence_working_in_flash_using_ram_data          0      237108
+sum_using_flat_sequence_working_in_flash_using_flash_data        0      237108
+******************************************************************************
+*                                                                            *
+*       Prefetch enabled, cache disabled                                     *
+*                                                                            *
+******************************************************************************
+sort_working_in_ram                                              1     2819014
+sum_using_for_loop_working_in_ram_using_ram_data                 1      101013
+sum_using_for_loop_working_in_ram_using_flash_data               1      101013
+sum_using_flat_sequence_working_in_ram_using_ram_data            1       66594
+sum_using_flat_sequence_working_in_ram_using_flash_data          1       66594
+sort_working_in_flash                                            1     3691025
+sum_using_for_loop_working_in_flash_using_ram_data               1      156527
+sum_using_for_loop_working_in_flash_using_flash_data             1      156527
+sum_using_flat_sequence_working_in_flash_using_ram_data          1       94661
+sum_using_flat_sequence_working_in_flash_using_flash_data        1       94727
+******************************************************************************
+*                                                                            *
+*       Prefetch disabled, cache enabled                                     *
+*                                                                            *
+******************************************************************************
+sort_working_in_ram                                              2     2819015
+sum_using_for_loop_working_in_ram_using_ram_data                 2      101014
+sum_using_for_loop_working_in_ram_using_flash_data               2      101014
+sum_using_flat_sequence_working_in_ram_using_ram_data            2       66596
+sum_using_flat_sequence_working_in_ram_using_flash_data          2       66596
+sort_working_in_flash                                            2     1875553
+sum_using_for_loop_working_in_flash_using_ram_data               2       58530
+sum_using_for_loop_working_in_flash_using_flash_data             2       58530
+sum_using_flat_sequence_working_in_flash_using_ram_data          2       95790
+sum_using_flat_sequence_working_in_flash_using_flash_data        2       95481
+******************************************************************************
+*                                                                            *
+*       Prefetch enabled, cache enabled                                      *
+*                                                                            *
+******************************************************************************
+sort_working_in_ram                                              3     2819014
+sum_using_for_loop_working_in_ram_using_ram_data                 3      101013
+sum_using_for_loop_working_in_ram_using_flash_data               3      101013
+sum_using_flat_sequence_working_in_ram_using_ram_data            3       66595
+sum_using_flat_sequence_working_in_ram_using_flash_data          3       66595
+sort_working_in_flash                                            3     1875546
+sum_using_for_loop_working_in_flash_using_ram_data               3       58528
+sum_using_for_loop_working_in_flash_using_flash_data             3       58528
+sum_using_flat_sequence_working_in_flash_using_ram_data          3       94661
+sum_using_flat_sequence_working_in_flash_using_flash_data        3       94728
+******************************************************************************
+*                                                                            *
+*       Enable data caching                                                  *
+*                                                                            *
+******************************************************************************
+sort_working_in_ram                                              4     2819014
+sum_using_for_loop_working_in_ram_using_ram_data                 4      101013
+sum_using_for_loop_working_in_ram_using_flash_data               4      101013
+sum_using_flat_sequence_working_in_ram_using_ram_data            4       66595
+sum_using_flat_sequence_working_in_ram_using_flash_data          4       66595
+sort_working_in_flash                                            4     1875546
+sum_using_for_loop_working_in_flash_using_ram_data               4       58528
+sum_using_for_loop_working_in_flash_using_flash_data             4       58528
+sum_using_flat_sequence_working_in_flash_using_ram_data          4       94661
+sum_using_flat_sequence_working_in_flash_using_flash_data        4       94728
+******************************************************************************
+*                                                                            *
+*       Set zero state data RAM access                                       *
+*                                                                            *
+******************************************************************************
+sort_working_in_ram                                              5     1755509
+sum_using_for_loop_working_in_ram_using_ram_data                 5       58509
+sum_using_for_loop_working_in_ram_using_flash_data               5       58509
+sum_using_flat_sequence_working_in_ram_using_ram_data            5       51025
+sum_using_flat_sequence_working_in_ram_using_flash_data          5       51025
+sort_working_in_flash                                            5     1499548
+sum_using_for_loop_working_in_flash_using_ram_data               5       50528
+sum_using_for_loop_working_in_flash_using_flash_data             5       50528
+sum_using_flat_sequence_working_in_flash_using_ram_data          5       86967
+sum_using_flat_sequence_working_in_flash_using_flash_data        5       86532
+******************************************************************************
+******************************************************************************
+******************************************************************************

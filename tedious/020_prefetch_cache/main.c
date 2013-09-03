@@ -19,7 +19,7 @@
 #define REPEAT 1000
 #define N      16
 
-const volatile int fa [N]
+const /* volatile */ int fa [N]
     = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 };
 
 volatile int a [N];
@@ -150,8 +150,8 @@ void test_one_function (int (* f) (void), char * name)
     printf ("%-60.60s  %4d  %10u\n",
         name, test_big_iteration, double_clock_cycles);
 
+    // prefetch_cache_report (true);
     check_sorting_results ();
-    // prefetch_cache_report (false);
 }
 
 #define TEST(f)  test_one_function (f, #f);
