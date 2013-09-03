@@ -1,0 +1,90 @@
+******************************************************************************
+*                                                                            *
+*       Default state                                                        *
+*                                                                            *
+******************************************************************************
+sort_working_in_ram                                              0     2867021
+sum_using_for_loop_working_in_ram_using_ram_data                 0      101021
+sum_using_for_loop_working_in_ram_using_flash_data               0      117021
+sum_using_flat_sequence_working_in_ram_using_ram_data            0       66603
+sum_using_flat_sequence_working_in_ram_using_flash_data          0      114354
+sort_working_in_flash                                            0    11100048
+sum_using_for_loop_working_in_flash_using_ram_data               0      404048
+sum_using_for_loop_working_in_flash_using_flash_data             0      340048
+sum_using_flat_sequence_working_in_flash_using_ram_data          0      237108
+sum_using_flat_sequence_working_in_flash_using_flash_data        0      300612
+******************************************************************************
+*                                                                            *
+*       Prefetch enabled, cache disabled                                     *
+*                                                                            *
+******************************************************************************
+sort_working_in_ram                                              1     2867011
+sum_using_for_loop_working_in_ram_using_ram_data                 1      101011
+sum_using_for_loop_working_in_ram_using_flash_data               1      117011
+sum_using_flat_sequence_working_in_ram_using_ram_data            1       66592
+sum_using_flat_sequence_working_in_ram_using_flash_data          1      114343
+sort_working_in_flash                                            1     4088523
+sum_using_for_loop_working_in_flash_using_ram_data               1      148523
+sum_using_for_loop_working_in_flash_using_flash_data             1      171524
+sum_using_flat_sequence_working_in_flash_using_ram_data          1       97793
+sum_using_flat_sequence_working_in_flash_using_flash_data        1      196039
+******************************************************************************
+*                                                                            *
+*       Prefetch disabled, cache enabled                                     *
+*                                                                            *
+******************************************************************************
+sort_working_in_ram                                              2     2867010
+sum_using_for_loop_working_in_ram_using_ram_data                 2      101010
+sum_using_for_loop_working_in_ram_using_flash_data               2      117010
+sum_using_flat_sequence_working_in_ram_using_ram_data            2       66592
+sum_using_flat_sequence_working_in_ram_using_flash_data          2      114343
+sort_working_in_flash                                            2     1931550
+sum_using_for_loop_working_in_flash_using_ram_data               2       58526
+sum_using_for_loop_working_in_flash_using_flash_data             2       98523
+sum_using_flat_sequence_working_in_flash_using_ram_data          2       98794
+sum_using_flat_sequence_working_in_flash_using_flash_data        2      156978
+******************************************************************************
+*                                                                            *
+*       Prefetch enabled, cache enabled                                      *
+*                                                                            *
+******************************************************************************
+sort_working_in_ram                                              3     2867011
+sum_using_for_loop_working_in_ram_using_ram_data                 3      101010
+sum_using_for_loop_working_in_ram_using_flash_data               3      117010
+sum_using_flat_sequence_working_in_ram_using_ram_data            3       66592
+sum_using_flat_sequence_working_in_ram_using_flash_data          3      114343
+sort_working_in_flash                                            3     1931546
+sum_using_for_loop_working_in_flash_using_ram_data               3       58525
+sum_using_for_loop_working_in_flash_using_flash_data             3       98536
+sum_using_flat_sequence_working_in_flash_using_ram_data          3       97792
+sum_using_flat_sequence_working_in_flash_using_flash_data        3      158351
+******************************************************************************
+*                                                                            *
+*       Enable data caching                                                  *
+*                                                                            *
+******************************************************************************
+sort_working_in_ram                                              4     2834010
+sum_using_for_loop_working_in_ram_using_ram_data                 4      101010
+sum_using_for_loop_working_in_ram_using_flash_data               4       84010
+sum_using_flat_sequence_working_in_ram_using_ram_data            4       66592
+sum_using_flat_sequence_working_in_ram_using_flash_data          4       79530
+sort_working_in_flash                                            4     1893050
+sum_using_for_loop_working_in_flash_using_ram_data               4       58525
+sum_using_for_loop_working_in_flash_using_flash_data             4       60030
+sum_using_flat_sequence_working_in_flash_using_ram_data          4       97792
+sum_using_flat_sequence_working_in_flash_using_flash_data        4      118413
+******************************************************************************
+*                                                                            *
+*       Set zero state data RAM access                                       *
+*                                                                            *
+******************************************************************************
+sort_working_in_ram                                              5     1765006
+sum_using_for_loop_working_in_ram_using_ram_data                 5       58506
+sum_using_for_loop_working_in_ram_using_flash_data               5       52006
+sum_using_flat_sequence_working_in_ram_using_ram_data            5       51022
+sum_using_flat_sequence_working_in_ram_using_flash_data          5       60960
+sort_working_in_flash                                            5     1525054
+sum_using_for_loop_working_in_flash_using_ram_data               5       50525
+sum_using_for_loop_working_in_flash_using_flash_data             5       60030
+sum_using_flat_sequence_working_in_flash_using_ram_data          5       86532
+sum_using_flat_sequence_working_in_flash_using_flash_data        5      113030
