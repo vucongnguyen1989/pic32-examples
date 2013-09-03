@@ -1,390 +1,102 @@
-**********************************************************************
-**********************************************************************
-**********************************************************************
-sort_working_in_sram  : A0003000
-sort_working_in_flash : 9D001D90
-*********  Flash cache report  *********
-
-Cache Coherency setting on a PFM Program Cycle bit:
-    Invalidate all data lines and instruction lines that are not locked
-
-Data Cache Size: Disable
-
-Predictive Prefetch Cache:
-    Disable
-
-PFM Access Time: 7 SYSCLK wait states
-
-Cache lines:
-
-     0 
-     1 
-     2 
-     3 
-     4 
-     5 
-     6 
-     7 
-     8 
-     9 
-    10 
-    11 
-    12 
-    13 
-    14 
-    15 
-
-LRU: 00000000
-
-Counters
-
-    Hit            :          0
-    Miss           :          0
-    Prefetch Abort :          0
-
-******  End of flash cache report  *****
-
-Sorting in SRAM  (in double clock cycles) :     737246 -          7 =     737239
-*********  Flash cache report  *********
-
-Cache Coherency setting on a PFM Program Cycle bit:
-    Invalidate all data lines and instruction lines that are not locked
-
-Data Cache Size: Disable
-
-Predictive Prefetch Cache:
-    Disable
-
-PFM Access Time: 7 SYSCLK wait states
-
-Cache lines:
-
-     0 
-     1 
-     2 
-     3 
-     4 
-     5 
-     6 
-     7 
-     8 
-     9 
-    10 
-    11 
-    12 
-    13 
-    14 
-    15 
-
-LRU: 00000000
-
-Counters
-
-    Hit            :          0
-    Miss           :          0
-    Prefetch Abort :          0
-
-******  End of flash cache report  *****
-
-Sorting in Flash (in double clock cycles) :    2830483 -          7 =    2830476
-*********  Flash cache report  *********
-
-Cache Coherency setting on a PFM Program Cycle bit:
-    Invalidate all data lines and instruction lines that are not locked
-
-Data Cache Size: Disable
-
-Predictive Prefetch Cache:
-    Disable
-
-PFM Access Time: 7 SYSCLK wait states
-
-Cache lines:
-
-     0 
-     1 
-     2 
-     3 
-     4 
-     5 
-     6 
-     7 
-     8 
-     9 
-    10 
-    11 
-    12 
-    13 
-    14 
-    15 
-
-LRU: 00000000
-
-Counters
-
-    Hit            :          0
-    Miss           :          0
-    Prefetch Abort :          0
-
-******  End of flash cache report  *****
-
-Relative execution time: sram  737239 / flash 2830476 = 0.26
-Relative execution time: flash 2830476 / sram  737239 = 3.84
-Sorting in SRAM  (in double clock cycles) :     737224 -          2 =     737222
-*********  Flash cache report  *********
-
-Cache Coherency setting on a PFM Program Cycle bit:
-    Invalidate all data lines and instruction lines that are not locked
-
-Data Cache Size: Disable
-
-Predictive Prefetch Cache:
-    Enable for both cacheable and non-cacheable regions
-
-PFM Access Time: 7 SYSCLK wait states
-
-Cache lines:
-
-     0 
-     1 
-     2 
-     3 
-     4 
-     5 
-     6 
-     7 
-     8 
-     9 
-    10 
-    11 
-    12 
-    13 
-    14 
-    15 
-
-LRU: 00000000
-
-Counters
-
-    Hit            :          0
-    Miss           :          0
-    Prefetch Abort :    3459911
-
-******  End of flash cache report  *****
-
-Sorting in Flash (in double clock cycles) :     981432 -          4 =     981428
-*********  Flash cache report  *********
-
-Cache Coherency setting on a PFM Program Cycle bit:
-    Invalidate all data lines and instruction lines that are not locked
-
-Data Cache Size: Disable
-
-Predictive Prefetch Cache:
-    Enable for both cacheable and non-cacheable regions
-
-PFM Access Time: 7 SYSCLK wait states
-
-Cache lines:
-
-     0 
-     1 
-     2 
-     3 
-     4 
-     5 
-     6 
-     7 
-     8 
-     9 
-    10 
-    11 
-    12 
-    13 
-    14 
-    15 
-
-LRU: 00000000
-
-Counters
-
-    Hit            :          0
-    Miss           :          0
-    Prefetch Abort :    3544714
-
-******  End of flash cache report  *****
-
-Relative execution time: sram  737222 / flash 981428 = 0.751
-Relative execution time: flash 981428 / sram  737222 = 1.33
-Sorting in SRAM  (in double clock cycles) :     737225 -          3 =     737222
-*********  Flash cache report  *********
-
-Cache Coherency setting on a PFM Program Cycle bit:
-    Invalidate all data lines and instruction lines that are not locked
-
-Data Cache Size: Disable
-
-Predictive Prefetch Cache:
-    Disable
-
-PFM Access Time: 7 SYSCLK wait states
-
-Cache lines:
-
-     0 1D005790 valid        instruction mask:    0   8C424020:30420004:10400005:00000000
-     1 1D000530 valid        instruction mask:    0   27BD0070:34630020:34630200:30620700
-     2 1D001B50 valid        instruction mask:    0   3C029D00:24423338:3C04BF88:8C844020
-     3 1D001B40 valid        instruction mask:    0   8FB60060:8FB5005C:8CA54070:AFA40010
-     4 1D000510 valid        instruction mask:    0   00000000:3C029D00:24433320:0B400703
-     5 1D005960 valid        instruction mask:    0   8CA84040:3C05BF88:8CA74050:3C05BF88
-     6 1D005950 valid        instruction mask:    0   03E00008:27BD0020:3C040000:27BDFFE8
-     7 1D000810 valid        instruction mask:    0   2484334C:3C05BF88:8CA94030:3C05BF88
-     8 1D001B40 valid        instruction mask:    0   8FB60060:8FB5005C:8CA54070:AFA40010
-     9 1D000540 valid        instruction mask:    0   8FB20050:8FB1004C:8FB00048:03E00008
-    10 1D005260 valid        instruction mask:    0   27BD0070:34630020:34630200:30620700
-    11 1D001B50 valid        instruction mask:    0   AFA7002C:0F400008:AFA20010:8FBF001C
-    12 1D001B40 valid        instruction mask:    0   03E00008:27BD0020:3C040000:27BDFFE8
-    13 1D000810 valid        instruction mask:    0   24843340:0B400719:00000000:3C049D00
-    14 1D000510 valid        instruction mask:    0   30840002:10800005:00000000:3C049D00
-    15 1D005270 valid        instruction mask:    0   00000000:3C029D00:24433320:0B400703
-
-LRU: 0155812B
-
-Counters
-
-    Hit            :  154702629
-    Miss           :      87581
-    Prefetch Abort :          0
-
-******  End of flash cache report  *****
-
-Sorting in Flash (in double clock cycles) :     581504 -          4 =     581500
-*********  Flash cache report  *********
-
-Cache Coherency setting on a PFM Program Cycle bit:
-    Invalidate all data lines and instruction lines that are not locked
-
-Data Cache Size: Disable
-
-Predictive Prefetch Cache:
-    Disable
-
-PFM Access Time: 7 SYSCLK wait states
-
-Cache lines:
-
-     0 1D005920 valid        instruction mask:    0   2484334C:3C05BF88:8CA94030:3C05BF88
-     1 1D000520 valid        instruction mask:    0   AFA7002C:0F400008:AFA20010:8FBF001C
-     2 1D005960 valid        instruction mask:    0   8CA84040:3C05BF88:8CA74050:3C05BF88
-     3 1D005270 valid        instruction mask:    0   30840002:10800005:00000000:3C049D00
-     4 1D000800 valid        instruction mask:    0   3C02BF88:8C424020:30420008:10400005
-     5 1D000510 valid        instruction mask:    0   00000000:3C029D00:24433320:0B400703
-     6 1D005960 valid        instruction mask:    0   8CA84040:3C05BF88:8CA74050:3C05BF88
-     7 1D005270 valid        instruction mask:    0   30840002:10800005:00000000:3C049D00
-     8 1D000810 valid        instruction mask:    0   2484334C:3C05BF88:8CA94030:3C05BF88
-     9 1D000520 valid        instruction mask:    0   AFA7002C:0F400008:AFA20010:8FBF001C
-    10 1D005960 valid        instruction mask:    0   3C02BF88:8C424020:30420008:10400005
-    11 1D000510 valid        instruction mask:    0   30840002:10800005:00000000:3C049D00
-    12 1D000810 valid        instruction mask:    0   24843340:0B400719:00000000:3C049D00
-    13 1D001B40 valid        instruction mask:    0   03E00008:27BD0020:3C040000:27BDFFE8
-    14 1D000530 valid        instruction mask:    0   8FB20050:8FB1004C:8FB00048:03E00008
-    15 1D000060 valid        instruction mask:    0   30420008:14400006:00000000:2404000A
-
-LRU: 00D8ACAF
-
-Counters
-
-    Hit            :  155790362
-    Miss           :      95381
-    Prefetch Abort :          0
-
-******  End of flash cache report  *****
-
-Relative execution time: sram  737222 / flash 581500 = 1.27
-Relative execution time: flash 581500 / sram  737222 = 0.789
-Sorting in SRAM  (in double clock cycles) :     737224 -          2 =     737222
-*********  Flash cache report  *********
-
-Cache Coherency setting on a PFM Program Cycle bit:
-    Invalidate all data lines and instruction lines that are not locked
-
-Data Cache Size: Disable
-
-Predictive Prefetch Cache:
-    Enable for both cacheable and non-cacheable regions
-
-PFM Access Time: 7 SYSCLK wait states
-
-Cache lines:
-
-     0 1D005750 valid        instruction mask:    0   0F40164A:00000000:3C02BF88:8C424020
-     1 1D000510 valid        instruction mask:    0   00000000:3C029D00:24433320:0B400703
-     2 1D001B50 valid        instruction mask:    0   3C029D00:24423338:3C04BF88:8C844020
-     3 1D005950 valid        instruction mask:    0   03E00008:27BD0020:3C040000:27BDFFE8
-     4 1D005270 valid        instruction mask:    0   30840002:10800005:00000000:3C049D00
-     5 1D005950 valid        instruction mask:    0   03E00008:27BD0020:3C040000:27BDFFE8
-     6 1D000530 valid        instruction mask:    0   27BD0070:34630020:34630200:30620700
-     7 1D001B50 valid        instruction mask:    0   3C029D00:24423338:3C04BF88:8C844020
-     8 1D001CD0 valid        instruction mask:    0   24843340:0B400719:00000000:3C049D00
-     9 1D005950 valid        instruction mask:    0   03E00008:27BD0020:3C040000:27BDFFE8
-    10 1D000530 valid        instruction mask:    0   8FB20050:8FB1004C:8FB00048:03E00008
-    11 1D001CD0 valid        instruction mask:    0   2484334C:3C05BF88:8CA94030:3C05BF88
-    12 1D000530 valid        instruction mask:    0   8FB20050:8FB1004C:8FB00048:03E00008
-    13 1D001CD0 valid        instruction mask:    0   2484334C:3C05BF88:8CA94030:3C05BF88
-    14 1D005960 valid        instruction mask:    0   3C02BF88:8C424020:30420008:10400005
-    15 1D001B40 valid        instruction mask:    0   03E00008:27BD0020:3C040000:27BDFFE8
-
-LRU: 0080A689
-
-Counters
-
-    Hit            :  158426953
-    Miss           :      91863
-    Prefetch Abort :      59079
-
-******  End of flash cache report  *****
-
-Sorting in Flash (in double clock cycles) :     592458 -          2 =     592456
-*********  Flash cache report  *********
-
-Cache Coherency setting on a PFM Program Cycle bit:
-    Invalidate all data lines and instruction lines that are not locked
-
-Data Cache Size: Disable
-
-Predictive Prefetch Cache:
-    Enable for both cacheable and non-cacheable regions
-
-PFM Access Time: 7 SYSCLK wait states
-
-Cache lines:
-
-     0 1D005790 valid        instruction mask:    0   8C424020:30420004:10400005:00000000
-     1 1D001CC0 valid        instruction mask:    0   30420008:14400006:00000000:2404000A
-     2 1D000530 valid        instruction mask:    0   27BD0070:34630020:34630200:30620700
-     3 1D001B50 valid        instruction mask:    0   3C029D00:24423338:3C04BF88:8C844020
-     4 1D001CC0 valid        instruction mask:    0   30420008:14400006:00000000:2404000A
-     5 1D000530 valid        instruction mask:    0   27BD0070:34630020:34630200:30620700
-     6 1D000520 valid        instruction mask:    0   AFA7002C:0F400008:AFA20010:8FBF001C
-     7 1D000800 valid        instruction mask:    0   3C02BF88:8C424020:30420008:10400005
-     8 1D001CD0 valid        instruction mask:    0   24843340:0B400719:00000000:3C049D00
-     9 1D001B40 valid        instruction mask:    0   8FB60060:8FB5005C:8CA54070:AFA40010
-    10 1D005260 valid        instruction mask:    0   27BD0070:34630020:34630200:30620700
-    11 1D000520 valid        instruction mask:    0   3C029D00:24423338:3C04BF88:8C844020
-    12 1D001CD0 valid        instruction mask:    0   2484334C:3C05BF88:8CA94030:3C05BF88
-    13 1D000800 valid        instruction mask:    0   8CA84040:3C05BF88:8CA74050:3C05BF88
-    14 1D005270 valid        instruction mask:    0   00000000:3C029D00:24433320:0B400703
-    15 1D005960 valid        instruction mask:    0   3C02BF88:8C424020:30420008:10400005
-
-LRU: 00A6026B
-
-Counters
-
-    Hit            :  159539292
-    Miss           :     106621
-    Prefetch Abort :      76597
-
-******  End of flash cache report  *****
-
-Relative execution time: sram  737222 / flash 592456 = 1.24
-Relative execution time: flash 592456 / sram  737222 = 0.804
+UART: Peripheral bus: 20000000 Hz, baud rate: 9600
+******************************************************************************
+******************************************************************************
+******************************************************************************
+*                                                                            *
+*       Sep  2 2013                                                          *
+*       18:30:49                                                             *
+*                                                                            *
+******************************************************************************
+******************************************************************************
+*                                                                            *
+*       Default state                                                        *
+*                                                                            *
+******************************************************************************
+   0  sort_working_in_ram                                              2819022
+   0  sum_using_for_loop_working_in_ram_using_ram_data                  101021
+   0  sum_using_for_loop_working_in_ram_using_flash_data                101021
+   0  sum_using_flat_sequence_working_in_ram_using_ram_data              66603
+   0  sum_using_flat_sequence_working_in_ram_using_flash_data            66603
+   0  sort_working_in_flash                                           11036052
+   0  sum_using_for_loop_working_in_flash_using_ram_data                404048
+   0  sum_using_for_loop_working_in_flash_using_flash_data              404048
+   0  sum_using_flat_sequence_working_in_flash_using_ram_data           237108
+   0  sum_using_flat_sequence_working_in_flash_using_flash_data         237108
+******************************************************************************
+*                                                                            *
+*       Prefetch enabled, cache disabled                                     *
+*                                                                            *
+******************************************************************************
+   1  sort_working_in_ram                                              2819014
+   1  sum_using_for_loop_working_in_ram_using_ram_data                  101013
+   1  sum_using_for_loop_working_in_ram_using_flash_data                101013
+   1  sum_using_flat_sequence_working_in_ram_using_ram_data              66594
+   1  sum_using_flat_sequence_working_in_ram_using_flash_data            66594
+   1  sort_working_in_flash                                            3691025
+   1  sum_using_for_loop_working_in_flash_using_ram_data                156528
+   1  sum_using_for_loop_working_in_flash_using_flash_data              156527
+   1  sum_using_flat_sequence_working_in_flash_using_ram_data            94661
+   1  sum_using_flat_sequence_working_in_flash_using_flash_data          94728
+******************************************************************************
+*                                                                            *
+*       Prefetch disabled, cache enabled                                     *
+*                                                                            *
+******************************************************************************
+   2  sort_working_in_ram                                              2819015
+   2  sum_using_for_loop_working_in_ram_using_ram_data                  101014
+   2  sum_using_for_loop_working_in_ram_using_flash_data                101014
+   2  sum_using_flat_sequence_working_in_ram_using_ram_data              66596
+   2  sum_using_flat_sequence_working_in_ram_using_flash_data            66596
+   2  sort_working_in_flash                                            1875553
+   2  sum_using_for_loop_working_in_flash_using_ram_data                 58530
+   2  sum_using_for_loop_working_in_flash_using_flash_data               58530
+   2  sum_using_flat_sequence_working_in_flash_using_ram_data            95790
+   2  sum_using_flat_sequence_working_in_flash_using_flash_data          95481
+******************************************************************************
+*                                                                            *
+*       Prefetch enabled, cache enabled                                      *
+*                                                                            *
+******************************************************************************
+   3  sort_working_in_ram                                              2819014
+   3  sum_using_for_loop_working_in_ram_using_ram_data                  101013
+   3  sum_using_for_loop_working_in_ram_using_flash_data                101013
+   3  sum_using_flat_sequence_working_in_ram_using_ram_data              66594
+   3  sum_using_flat_sequence_working_in_ram_using_flash_data            66594
+   3  sort_working_in_flash                                            1875546
+   3  sum_using_for_loop_working_in_flash_using_ram_data                 58527
+   3  sum_using_for_loop_working_in_flash_using_flash_data               58527
+   3  sum_using_flat_sequence_working_in_flash_using_ram_data            94661
+   3  sum_using_flat_sequence_working_in_flash_using_flash_data          94727
+******************************************************************************
+*                                                                            *
+*       Enable data caching                                                  *
+*                                                                            *
+******************************************************************************
+   4  sort_working_in_ram                                              2819014
+   4  sum_using_for_loop_working_in_ram_using_ram_data                  101013
+   4  sum_using_for_loop_working_in_ram_using_flash_data                101013
+   4  sum_using_flat_sequence_working_in_ram_using_ram_data              66594
+   4  sum_using_flat_sequence_working_in_ram_using_flash_data            66594
+   4  sort_working_in_flash                                            1875546
+   4  sum_using_for_loop_working_in_flash_using_ram_data                 58527
+   4  sum_using_for_loop_working_in_flash_using_flash_data               58527
+   4  sum_using_flat_sequence_working_in_flash_using_ram_data            94661
+   4  sum_using_flat_sequence_working_in_flash_using_flash_data          94727
+******************************************************************************
+*                                                                            *
+*       Set zero state data RAM access                                       *
+*                                                                            *
+******************************************************************************
+   5  sort_working_in_ram                                              1755509
+   5  sum_using_for_loop_working_in_ram_using_ram_data                   58509
+   5  sum_using_for_loop_working_in_ram_using_flash_data                 58509
+   5  sum_using_flat_sequence_working_in_ram_using_ram_data              51025
+   5  sum_using_flat_sequence_working_in_ram_using_flash_data            51025
+   5  sort_working_in_flash                                            1499548
+   5  sum_using_for_loop_working_in_flash_using_ram_data                 50528
+   5  sum_using_for_loop_working_in_flash_using_flash_data               50528
+   5  sum_using_flat_sequence_working_in_flash_using_ram_data            86966
+   5  sum_using_flat_sequence_working_in_flash_using_flash_data          86532
+******************************************************************************
+******************************************************************************
+******************************************************************************
