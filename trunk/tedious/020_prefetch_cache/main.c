@@ -19,7 +19,7 @@
 #define REPEAT 1000
 #define N      16
 
-const /* volatile */ int fa [N]
+const /* no volatile */ int fa [N]
     = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 };
 
 volatile int a [N];
@@ -75,20 +75,7 @@ int sum_using_for_loop_working_in_flash_using_flash_data (void)
 {
     const volatile int * a = fa;
 
-{
-    int i, k, n = 0;
-
-    for (k = 0; k < REPEAT; k ++)
-    {
-        for (i = 0; i < N; i ++)
-            n += a [i];
-    }
-
-    return n;
-}
-
-
-    // #include "sum_using_for_loop.inc"
+    #include "sum_using_for_loop.inc"
 }
 
 int sum_using_flat_sequence_working_in_flash_using_ram_data (void)
@@ -117,6 +104,26 @@ void check_sorting_results ()
         if (a [i] != fa [N - 1 - i])
             printf ("!!! Sorting error !!!\n");
     }
+}
+
+//--------------------------------------------------------------------
+
+void dump_memory (const volatile void * p)
+{
+    unsigned         address = (unsigned) p & ~ 0xF;
+    const unsigned * up      = (const unsigned *) address;
+
+    int i;
+
+    for (i = 0; i < 32; i ++)
+    {
+        if (i % 4 == 0)
+            printf ("\n%.8X", address + i * 4);
+
+        printf (" %.8X", up [i]);
+    }
+
+    printf ("\n");
 }
 
 //--------------------------------------------------------------------
@@ -180,7 +187,7 @@ void test_one_function (int (* f) (void), char * name)
 
     printf ("\nFunction dump:\n\n");
 
-    for (i = 0; i < 64; i++)
+    for (i = 0; i < 8; i++)
     {
         if (i % 4 == 0)
             printf ("%.8X: ", (unsigned) ((unsigned *) (void *) f + i));
@@ -257,23 +264,11 @@ void main ()
     printf ("!!! %.8X %.8X", a, fa);
 
 
-    printf ("\nFunction dump:\n\n");
+    printf ("\nFunction dump:\n");
 
-    {
-        int i;
-    for (i = 0; i < 64; i++)
-    {
-        int (* f) () = sum_using_for_loop_working_in_flash_using_flash_data;
-
-        if (i % 4 == 0)
-            printf ("%.8X: ", (unsigned) ((unsigned *) (void *) f + i));
-
-        printf (" %.8X", ((unsigned *) (void *) f) [i]);
-
-        if (i % 4 == 3)
-            printf ("\n");
-    }
-    }
+    dump_memory (sum_using_for_loop_working_in_flash_using_flash_data);
+    dump_memory (a);
+    dump_memory (fa);
 
     for (;;);
 
