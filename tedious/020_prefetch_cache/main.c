@@ -75,7 +75,20 @@ int sum_using_for_loop_working_in_flash_using_flash_data (void)
 {
     const volatile int * a = fa;
 
-    #include "sum_using_for_loop.inc"
+{
+    int i, k, n = 0;
+
+    for (k = 0; k < REPEAT; k ++)
+    {
+        for (i = 0; i < N; i ++)
+            n += a [i];
+    }
+
+    return n;
+}
+
+
+    // #include "sum_using_for_loop.inc"
 }
 
 int sum_using_flat_sequence_working_in_flash_using_ram_data (void)
@@ -108,11 +121,26 @@ void check_sorting_results ()
 
 //--------------------------------------------------------------------
 
+unsigned double_clock_cycles;
+
+__longramfunc__ int run_and_backup_cache (int (* f) (void))
+{
+    int result;
+
+    double_clock_cycles = _CP0_GET_COUNT ();
+    result = f ();
+    double_clock_cycles = _CP0_GET_COUNT () - double_clock_cycles;
+    prefetch_cache_backup ();
+
+    return result;
+}
+
+//--------------------------------------------------------------------
+
 int test_big_iteration = 0;
 
 void test_one_function (int (* f) (void), char * name)
 {
-    unsigned double_clock_cycles;
     int result;
     int i;
 
@@ -136,22 +164,34 @@ void test_one_function (int (* f) (void), char * name)
 
     // printf ("Check counter: %10u\n", _CP0_GET_COUNT ());
 
-    double_clock_cycles = _CP0_GET_COUNT ();
-    result = f ();
-    double_clock_cycles = _CP0_GET_COUNT () - double_clock_cycles;
+    result = run_and_backup_cache (f);
 
-    // printf ("%-60.60s : address : %.8X", name, (unsigned) f);
+    printf ("%-60.60s : address : %.8X", name, (unsigned) (char *) (void *) f);
 
-    // printf (" : result : %10u : double clock cycles : %10u\n",
-    //     result, double_clock_cycles);
+    printf (" : result : %10u : double clock cycles : %10u\n",
+        result, double_clock_cycles);
 
     // printf ("%-58.58s  %10u\n", name, double_clock_cycles);
 
-    printf ("%-60.60s  %4d  %10u\n",
-        name, test_big_iteration, double_clock_cycles);
+    // printf ("%-60.60s  %4d  %10u\n",
+    //    name, test_big_iteration, double_clock_cycles);
 
-    // prefetch_cache_report (true);
     check_sorting_results ();
+
+    printf ("\nFunction dump:\n\n");
+
+    for (i = 0; i < 64; i++)
+    {
+        if (i % 4 == 0)
+            printf ("%.8X: ", (unsigned) ((unsigned *) (void *) f + i));
+
+        printf (" %.8X", ((unsigned *) (void *) f) [i]);
+
+        if (i % 4 == 3)
+            printf ("\n");
+    }
+
+    prefetch_cache_report (true);
 }
 
 #define TEST(f)  test_one_function (f, #f);
@@ -192,6 +232,67 @@ void main ()
     printf ("*       %s                                                             *\n", __TIME__);
     printf ("*                                                                            *\n");
     printf ("******************************************************************************\n");
+
+
+
+    {
+        unsigned config = _mfc0 (_CP0_CONFIG, _CP0_CONFIG_SELECT);
+
+        config &= ~ _CP0_CONFIG_K0_MASK;
+        config |= 3 << _CP0_CONFIG_K0_POSITION;
+
+        _mtc0 (_CP0_CONFIG, _CP0_CONFIG_SELECT, config);
+    }
+
+//    CheKseg0CacheOn ();
+    CHECONbits.PREFEN = 3;
+    CHECONbits.DCSZ = 3;  // Enable data caching with a size of 4 Lines
+    BMXCONbits.BMXWSDRM = 0;
+
+    sum_using_for_loop_working_in_flash_using_flash_data ();
+    CheKseg0CacheOff ();
+    prefetch_cache_backup ();
+    prefetch_cache_report (true);
+
+    printf ("!!! %.8X %.8X", a, fa);
+
+
+    printf ("\nFunction dump:\n\n");
+
+    {
+        int i;
+    for (i = 0; i < 64; i++)
+    {
+        int (* f) () = sum_using_for_loop_working_in_flash_using_flash_data;
+
+        if (i % 4 == 0)
+            printf ("%.8X: ", (unsigned) ((unsigned *) (void *) f + i));
+
+        printf (" %.8X", ((unsigned *) (void *) f) [i]);
+
+        if (i % 4 == 3)
+            printf ("\n");
+    }
+    }
+
+    for (;;);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     printf ("******************************************************************************\n");
     printf ("*                                                                            *\n");
