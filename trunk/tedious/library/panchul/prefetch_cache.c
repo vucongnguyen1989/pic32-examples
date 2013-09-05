@@ -1,13 +1,53 @@
 //  File:   prefetch_cache.c
 //  Author: Yuri Panchul
 
+#include <sys/attribs.h>
 #include <p32xxxx.h>
 
 #include "prefetch_cache.h"
 
+#define n_cache_lines 16
+
+unsigned       copy_CHELRU;
+unsigned       copy_CHEHIT;
+unsigned       copy_CHEMIS;
+unsigned       copy_CHEPFABT;
+
+__CHETAGbits_t copy_CHETAGbits [n_cache_lines];
+unsigned       copy_CHEMSK     [n_cache_lines];
+unsigned       copy_CHEW0      [n_cache_lines];
+unsigned       copy_CHEW1      [n_cache_lines];
+unsigned       copy_CHEW2      [n_cache_lines];
+unsigned       copy_CHEW3      [n_cache_lines];
+
+__longramfunc__ void prefetch_cache_backup (void)
+{
+    int i;
+
+    copy_CHELRU   = CHELRU;
+    copy_CHEHIT   = CHEHIT;
+    copy_CHEMIS   = CHEMIS;
+    copy_CHEPFABT = CHEPFABT;
+
+    for (i = 0; i < n_cache_lines; i ++)
+    {
+        // CHEACCbits.CHEWEN = 0;  // Write enable
+        // CHEACCbits.CHEIDX = i;  // Cache Line Index
+
+        CHEACC = i;
+
+        copy_CHETAGbits [i] = CHETAGbits ;
+        copy_CHEMSK     [i] = CHEMSK     ;
+        copy_CHEW0      [i] = CHEW0      ;
+        copy_CHEW1      [i] = CHEW1      ;
+        copy_CHEW2      [i] = CHEW2      ;
+        copy_CHEW3      [i] = CHEW3      ;
+    }
+}
+
 void prefetch_cache_report (bool dump_cache_lines)
 {
-    int n_cache_lines_to_dump = dump_cache_lines ? 16 : 0;
+    int n_cache_lines_to_dump = dump_cache_lines ? n_cache_lines : 0;
     int i;
 
     printf ("*********  prefetch cache report  *********\n");
@@ -40,16 +80,33 @@ void prefetch_cache_report (bool dump_cache_lines)
 
     printf ("PFM Access Time: %d SYSCLK wait states\n", CHECONbits.PFMWS);
 
+    {
+        unsigned CHELRU   = copy_CHELRU;
+        unsigned CHEHIT   = copy_CHEHIT;
+        unsigned CHEMIS   = copy_CHEMIS;
+        unsigned CHEPFABT = copy_CHEPFABT;
+
+        printf ("\nLRU: %.8X\n", CHELRU);
+
+        printf ("\nCounters\n\n");
+
+        printf ("    Hit            : %10d\n", CHEHIT   );
+        printf ("    Miss           : %10d\n", CHEMIS   );
+        printf ("    Prefetch Abort : %10d\n", CHEPFABT );
+    }
+
     printf ("\nCache lines:\n\n");
 
     for (i = 0; i < n_cache_lines_to_dump; i ++)
     {
+        __CHETAGbits_t CHETAGbits = copy_CHETAGbits [i];
+        unsigned       CHEMSK     = copy_CHEMSK     [i];
+        unsigned       CHEW0      = copy_CHEW0      [i];
+        unsigned       CHEW1      = copy_CHEW1      [i];
+        unsigned       CHEW2      = copy_CHEW2      [i];
+        unsigned       CHEW3      = copy_CHEW3      [i];
+
         unsigned address;
-
-        // CHEACCbits.CHEWEN = 0;  // Write enable
-        // CHEACCbits.CHEIDX = i;  // Cache Line Index
-
-        CHEACC = i;
 
         if (CHETAGbits.LTAGBOOT)
             address = 0x1D000000 + (CHETAGbits.LTAG << 4);
@@ -72,14 +129,6 @@ void prefetch_cache_report (bool dump_cache_lines)
                 CHEMSK,
                 CHEW0, CHEW1, CHEW2, CHEW3);
     }
-
-    printf ("\nLRU: %.8X\n", CHELRU);
-
-    printf ("\nCounters\n\n");
-
-    printf ("    Hit            : %10d\n", CHEHIT );
-    printf ("    Miss           : %10d\n", CHEMIS );
-    printf ("    Prefetch Abort : %10d\n", CHEPFABT  );
 
     printf ("\n");
     printf ("******  End of prefetch cache report  *****\n\n");

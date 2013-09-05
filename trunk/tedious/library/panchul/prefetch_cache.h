@@ -4,8 +4,11 @@
 #ifndef PREFETCH_CACHE_H
 #define PREFETCH_CACHE_H
 
+#include <sys/attribs.h>
+
 #include "types.h"
 
+__longramfunc__ void prefetch_cache_backup (void);
 void prefetch_cache_report (bool dump_cache_lines);
 
 #endif
