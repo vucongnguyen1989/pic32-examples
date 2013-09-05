@@ -179,22 +179,22 @@ void test_one_function (int (* f) (void), char * name)
 
     result = run_and_backup_cache (f);
 
-    printf ("%-60.60s : address : %.8X", name, (unsigned) (char *) (void *) f);
+    // printf ("%-60.60s : address : %.8X", name, (unsigned) (char *) (void *) f);
 
-    printf (" : result : %10u : double clock cycles : %10u\n",
-        result, double_clock_cycles);
+    // printf (" : result : %10u : double clock cycles : %10u\n",
+    //     result, double_clock_cycles);
 
     // printf ("%-58.58s  %10u\n", name, double_clock_cycles);
 
-    // printf ("%-60.60s  %4d  %10u\n",
-    //    name, test_big_iteration, double_clock_cycles);
+    printf ("%-60.60s  %4d  %10u\n",
+        name, test_big_iteration, double_clock_cycles);
 
     check_sorting_results ();
 
-    prefetch_cache_report (true);
+    // prefetch_cache_report (true);
 
-    printf ("\nFunction dump:\n\n");
-    dump_memory (f);
+    // printf ("\nFunction dump:\n\n");
+    // dump_memory (f);
 }
 
 #define TEST(f)  test_one_function (f, #f);
