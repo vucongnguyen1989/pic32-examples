@@ -19,8 +19,14 @@
 #define REPEAT 1000
 #define N      16
 
-const /* no volatile */ int fa [N]
+// If you put "const volatile" here,
+// the linker puts it into uncacheable region
+
+const int fa [N]
     = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 };
+
+// "volatile" here is necessary so that the compiler
+// will not optimize the accesses to this memory away
 
 volatile int a [N];
 
@@ -185,20 +191,10 @@ void test_one_function (int (* f) (void), char * name)
 
     check_sorting_results ();
 
-    printf ("\nFunction dump:\n\n");
-
-    for (i = 0; i < 8; i++)
-    {
-        if (i % 4 == 0)
-            printf ("%.8X: ", (unsigned) ((unsigned *) (void *) f + i));
-
-        printf (" %.8X", ((unsigned *) (void *) f) [i]);
-
-        if (i % 4 == 3)
-            printf ("\n");
-    }
-
     prefetch_cache_report (true);
+
+    printf ("\nFunction dump:\n\n");
+    dump_memory (f);
 }
 
 #define TEST(f)  test_one_function (f, #f);
@@ -229,7 +225,11 @@ void main ()
 
     __C32_UART = 1;
 
-    uart_init (9600);
+    // u = PBCLK_FREQUENCY;
+    // u = SYSTEMConfigWaitStatesAndPB (SYSCLK_FREQUENCY);
+    // u = SYSTEMConfigPerformance (SYSCLK_FREQUENCY);
+
+    uart_init (PBCLK_FREQUENCY, 9600);
 
     printf ("******************************************************************************\n");
     printf ("******************************************************************************\n");
@@ -240,55 +240,6 @@ void main ()
     printf ("*                                                                            *\n");
     printf ("******************************************************************************\n");
 
-
-
-    {
-        unsigned config = _mfc0 (_CP0_CONFIG, _CP0_CONFIG_SELECT);
-
-        config &= ~ _CP0_CONFIG_K0_MASK;
-        config |= 3 << _CP0_CONFIG_K0_POSITION;
-
-        _mtc0 (_CP0_CONFIG, _CP0_CONFIG_SELECT, config);
-    }
-
-//    CheKseg0CacheOn ();
-    CHECONbits.PREFEN = 3;
-    CHECONbits.DCSZ = 3;  // Enable data caching with a size of 4 Lines
-    BMXCONbits.BMXWSDRM = 0;
-
-    sum_using_for_loop_working_in_flash_using_flash_data ();
-    CheKseg0CacheOff ();
-    prefetch_cache_backup ();
-    prefetch_cache_report (true);
-
-    printf ("!!! %.8X %.8X", a, fa);
-
-
-    printf ("\nFunction dump:\n");
-
-    dump_memory (sum_using_for_loop_working_in_flash_using_flash_data);
-    dump_memory (a);
-    dump_memory (fa);
-
-    for (;;);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     printf ("******************************************************************************\n");
     printf ("*                                                                            *\n");
     printf ("*       Default state                                                        *\n");
@@ -296,7 +247,19 @@ void main ()
     printf ("******************************************************************************\n");
 
     test_all_functions ();
-    
+
+    printf ("******************************************************************************\n");
+    printf ("*                                                                            *\n");
+    printf ("*       Lower number of wait states                                          *\n");
+    printf ("*                                                                            *\n");
+    printf ("******************************************************************************\n");
+
+    // Flash can run at 30 MHz, processor 80 MHz
+
+    CHECONbits.PFMWS = 3;
+
+    test_all_functions ();
+
     printf ("******************************************************************************\n");
     printf ("*                                                                            *\n");
     printf ("*       Prefetch enabled, cache disabled                                     *\n");
