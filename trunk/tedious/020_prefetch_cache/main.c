@@ -14,105 +14,166 @@
 #include "types.h"
 #include "prefetch_cache.h"
 
-//--------------------------------------------------------------------
+//----------------------------------------------------------------------------
 
-#define REPEAT 1000
-#define N      16
+#define times_to_repeat   1000
+#define n_array_elements  16
+
+#define expected_function_result  \
+    ((n_array_elements * (n_array_elements - 1) / 2) * times_to_repeat)
 
 // If you put "const volatile" here,
 // the linker puts it into uncacheable region
 
-const int fa [N]
+const int array_in_flash [N]
     = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 };
 
 // "volatile" here is necessary so that the compiler
 // will not optimize the accesses to this memory away
 
-volatile int a [N];
+volatile int array_in_ram [N];
 
-//--------------------------------------------------------------------
+/*
+    const volatile int * a = array_in_flash;
 
-__longramfunc__ int sort_working_in_ram (void)
-{
-    #include "sort.inc"
+    int i, k, n = 0;
 
-    return 0;
-}
-
-__longramfunc__ int sum_using_for_loop_working_in_ram_using_ram_data (void)
-{
-    #include "sum_using_for_loop.inc"
-}
-
-__longramfunc__ int sum_using_for_loop_working_in_ram_using_flash_data (void)
-{
-    const volatile int * a = fa;
-
-    #include "sum_using_for_loop.inc"
-}
-
-__longramfunc__ int sum_using_flat_sequence_working_in_ram_using_ram_data (void)
-{
-    #include "sum_using_flat_sequence.inc"
-}
-
-__longramfunc__ int sum_using_flat_sequence_working_in_ram_using_flash_data (void)
-{
-    const volatile int * a = fa;
-
-    #include "sum_using_flat_sequence.inc"
-}
-
-//--------------------------------------------------------------------
-
-int sort_working_in_flash (void)
-{
-    #include "sort.inc"
-
-    return 0;
-}
-
-int sum_using_for_loop_working_in_flash_using_ram_data (void)
-{
-    #include "sum_using_for_loop.inc"
-}
-
-int sum_using_for_loop_working_in_flash_using_flash_data (void)
-{
-    const volatile int * a = fa;
-
-    #include "sum_using_for_loop.inc"
-}
-
-int sum_using_flat_sequence_working_in_flash_using_ram_data (void)
-{
-    #include "sum_using_flat_sequence.inc"
-}
-
-int sum_using_flat_sequence_working_in_flash_using_flash_data (void)
-{
-    const volatile int * a = fa;
-
-    #include "sum_using_flat_sequence.inc"
-}
-
-//--------------------------------------------------------------------
-
-void check_sorting_results ()
-{
-    int i;
-
-    for (i = 0; i < N; i ++)
+    for (k = 0; k < times_to_repeat; k ++)
     {
-        // printf ("a [%2d] = %10d : fa [%2d] = %10d\n",
-        //     i, a [i], i, fa [i]);
-        
-        if (a [i] != fa [N - 1 - i])
-            printf ("!!! Sorting error !!!\n");
+        for (i = 0; i < N; i ++)
+            n += a [i];
     }
-}
+
+    return n;
+
+    const volatile int * a = array_in_flash;
+
+    n +=                                     \
+          a [ 0] + a [ 1] + a [ 2] + a [ 3]  \
+        + a [ 4] + a [ 5] + a [ 6] + a [ 7]  \
+        + a [ 8] + a [ 9] + a [10] + a [11]  \
+        + a [12] + a [13] + a [14] + a [15];
+
+    n +=                                     \
+          a [ 0] + a [ 1] + a [ 2] + a [ 3]  \
+        + a [ 4] + a [ 5] + a [ 6] + a [ 7]  \
+        + a [ 8] + a [ 9] + a [10] + a [11]  \
+        + a [12] + a [13] + a [14] + a [15];
+
+    return n;
+*/
 
 //--------------------------------------------------------------------
+
+int program_in_flash_data_in_flash__loop (void)
+{
+    const volatile int * a = array_in_flash;
+
+    int i, k, n = 0;
+
+    for (k = 0; k < times_to_repeat; k ++)
+    {
+        for (i = 0; i < N; i ++)
+            n += a [i];
+    }
+
+    return n;
+}
+
+int program_in_flash_data_in_ram____loop (void)
+{
+    const volatile int * a = array_in_ram;
+
+    int i, k, n = 0;
+
+    for (k = 0; k < times_to_repeat; k ++)
+    {
+        for (i = 0; i < N; i ++)
+            n += a [i];
+    }
+
+    return n;
+}
+
+__longramfunc__ int program_in_ram___data_in_flash__loop (void)
+{
+    const volatile int * a = array_in_flash;
+
+    int i, k, n = 0;
+
+    for (k = 0; k < times_to_repeat; k ++)
+    {
+        for (i = 0; i < N; i ++)
+            n += a [i];
+    }
+
+    return n;
+}
+
+__longramfunc__ int program_in_ram___data_in_ram____loop (void)
+{
+    const volatile int * a = array_in_ram;
+
+    int i, k, n = 0;
+
+    for (k = 0; k < times_to_repeat; k ++)
+    {
+        for (i = 0; i < N; i ++)
+            n += a [i];
+    }
+
+    return n;
+}
+
+int program_in_flash_data_in_flash__long_sequence (void)
+{
+    const volatile int * a = array_in_flash;
+
+    return
+      a [ 0] + a [ 1] + a [ 2] + a [ 3] + a [ 4] + a [ 5] + a [ 6] + a [ 7]
+    + a [ 8] + a [ 9] + a [10] + a [11] + a [12] + a [13] + a [14] + a [15]
+    + a [ 0] + a [ 1] + a [ 2] + a [ 3] + a [ 4] + a [ 5] + a [ 6] + a [ 7]
+    + a [ 8] + a [ 9] + a [10] + a [11] + a [12] + a [13] + a [14] + a [15]
+    ;
+}
+
+int program_in_flash_data_in_ram____long_sequence (void)
+{
+    const volatile int * a = array_in_ram;
+
+    return
+      a [ 0] + a [ 1] + a [ 2] + a [ 3] + a [ 4] + a [ 5] + a [ 6] + a [ 7]
+    + a [ 8] + a [ 9] + a [10] + a [11] + a [12] + a [13] + a [14] + a [15]
+    + a [ 0] + a [ 1] + a [ 2] + a [ 3] + a [ 4] + a [ 5] + a [ 6] + a [ 7]
+    + a [ 8] + a [ 9] + a [10] + a [11] + a [12] + a [13] + a [14] + a [15]
+    ;
+}
+
+__longramfunc__ int program_in_ram___data_in_flash__long_sequence (void)
+{
+    const volatile int * a = array_in_flash;
+
+    return
+      a [ 0] + a [ 1] + a [ 2] + a [ 3] + a [ 4] + a [ 5] + a [ 6] + a [ 7]
+    + a [ 8] + a [ 9] + a [10] + a [11] + a [12] + a [13] + a [14] + a [15]
+    + a [ 0] + a [ 1] + a [ 2] + a [ 3] + a [ 4] + a [ 5] + a [ 6] + a [ 7]
+    + a [ 8] + a [ 9] + a [10] + a [11] + a [12] + a [13] + a [14] + a [15]
+    ;
+}
+
+__longramfunc__ int program_in_ram___data_in_ram____long_sequence (void)
+{
+    const volatile int * a = array_in_ram;
+
+    return
+      a [ 0] + a [ 1] + a [ 2] + a [ 3] + a [ 4] + a [ 5] + a [ 6] + a [ 7]
+    + a [ 8] + a [ 9] + a [10] + a [11] + a [12] + a [13] + a [14] + a [15]
+    + a [ 0] + a [ 1] + a [ 2] + a [ 3] + a [ 4] + a [ 5] + a [ 6] + a [ 7]
+    + a [ 8] + a [ 9] + a [10] + a [11] + a [12] + a [13] + a [14] + a [15]
+    ;
+}
+
+//----------------------------------------------------------------------------
 
 void dump_memory (const volatile void * p)
 {
@@ -132,7 +193,7 @@ void dump_memory (const volatile void * p)
     printf ("\n");
 }
 
-//--------------------------------------------------------------------
+//----------------------------------------------------------------------------
 
 unsigned double_clock_cycles;
 
@@ -148,13 +209,17 @@ __longramfunc__ int run_and_backup_cache (int (* f) (void))
     return result;
 }
 
-//--------------------------------------------------------------------
+//----------------------------------------------------------------------------
 
-int test_big_iteration = 0;
+int configuration_number = 0;
 
-void test_one_function (int (* f) (void), char * name)
+void test_one_function_for_the_current_configuration
+(
+    int (* function) (void),
+    char * function_name
+)
 {
-    int result;
+    int function_result;
     int i;
 
     // Clear all cache statistics
@@ -177,106 +242,101 @@ void test_one_function (int (* f) (void), char * name)
 
     // printf ("Check counter: %10u\n", _CP0_GET_COUNT ());
 
-    result = run_and_backup_cache (f);
+    function_result = run_function_and_backup_cache (function);
 
-    // printf ("%-60.60s : address : %.8X", name, (unsigned) (char *) (void *) f);
-
-    // printf (" : result : %10u : double clock cycles : %10u\n",
-    //     result, double_clock_cycles);
-
-    // printf ("%-58.58s  %10u\n", name, double_clock_cycles);
+    if (function_result != expected_function_result)
+        printf ("\n!!! Erratic behavior !!!\n\n");
 
     printf ("%-60.60s  %4d  %10u\n",
-        name, test_big_iteration, double_clock_cycles);
+        function_name, configuration_number, double_clock_cycles);
 
-    check_sorting_results ();
+    prefetch_cache_report (true);
 
-    // prefetch_cache_report (true);
-
-    // printf ("\nFunction dump:\n\n");
-    // dump_memory (f);
+    printf ("\nFunction dump:\n\n");
+    dump_memory (function);
 }
 
-#define TEST(f)  test_one_function (f, #f);
+//----------------------------------------------------------------------------
 
-//--------------------------------------------------------------------
-
-void test_all_functions ()
+void test_all_functions_for_the_current_configuration (void)
+(
+    const char * configuration_description
+)
 {
-    TEST ( sort_working_in_ram                                       );
-    TEST ( sum_using_for_loop_working_in_ram_using_ram_data          );
-    TEST ( sum_using_for_loop_working_in_ram_using_flash_data        );
-    TEST ( sum_using_flat_sequence_working_in_ram_using_ram_data     );
-    TEST ( sum_using_flat_sequence_working_in_ram_using_flash_data   );
-    TEST ( sort_working_in_flash                                     );
-    TEST ( sum_using_for_loop_working_in_flash_using_ram_data        );
-    TEST ( sum_using_for_loop_working_in_flash_using_flash_data      );
-    TEST ( sum_using_flat_sequence_working_in_flash_using_ram_data   );
-    TEST ( sum_using_flat_sequence_working_in_flash_using_flash_data );
+    #define TEST(f)  test_one_function_for_the_current_configuration (f, #f);
 
-    test_big_iteration ++;
+    TEST ( program_in_flash_data_in_flash__loop          );
+    TEST ( program_in_flash_data_in_ram____loop          );
+    TEST ( program_in_ram___data_in_flash__loop          );
+    TEST ( program_in_ram___data_in_ram____loop          );
+    TEST ( program_in_flash_data_in_flash__long_sequence );
+    TEST ( program_in_flash_data_in_ram____long_sequence );
+    TEST ( program_in_ram___data_in_flash__long_sequence );
+    TEST ( program_in_ram___data_in_ram____long_sequence );
+
+    #undef TEST
+
+    configuration_number ++;
 }
 
-//--------------------------------------------------------------------
+//----------------------------------------------------------------------------
 
 void main ()
 {
-    bool alternative_way = true;
+    bool alternative_way = false;
 
     __C32_UART = 1;
 
-    // u = PBCLK_FREQUENCY;
-    // u = SYSTEMConfigWaitStatesAndPB (SYSCLK_FREQUENCY);
-    // u = SYSTEMConfigPerformance (SYSCLK_FREQUENCY);
+    uart_init (115200);
 
-    uart_init (PBCLK_FREQUENCY, 9600);
+    printf ("************************************************************\n"
+            "************************************************************\n"
+            "************************************************************\n"
+            "*                                                          *\n"
+            "*       %s                                       *\n"
+            "*       %s                                          *\n"
+            "*                                                          *\n"
+            "************************************************************\n",
+            __DATE__, __TIME__);
 
-    printf ("******************************************************************************\n");
-    printf ("******************************************************************************\n");
-    printf ("******************************************************************************\n");
-    printf ("*                                                                            *\n");
-    printf ("*       %s                                                          *\n", __DATE__);
-    printf ("*       %s                                                             *\n", __TIME__);
-    printf ("*                                                                            *\n");
-    printf ("******************************************************************************\n");
+    printf ("************************************************************\n"
+            "*                                                          *\n"
+            "*       Default configuration                              *\n"
+            "*                                                          *\n"
+            "************************************************************\n");
 
-    printf ("******************************************************************************\n");
-    printf ("*                                                                            *\n");
-    printf ("*       Default state                                                        *\n");
-    printf ("*                                                                            *\n");
-    printf ("******************************************************************************\n");
+    test_all_functions_for_the_current_configuration ();
 
-    test_all_functions ();
+    printf ("************************************************************\n"
+            "*                                                          *\n"
+            "*       Lower number of wait states                        *\n"
+            "*                                                          *\n"
+            "************************************************************\n");
 
-    printf ("******************************************************************************\n");
-    printf ("*                                                                            *\n");
-    printf ("*       Lower number of wait states                                          *\n");
-    printf ("*                                                                            *\n");
-    printf ("******************************************************************************\n");
+    // The default number of flash wait states is 7, it can be lowered.
+    // For example: flash can run at 30 MHz, processor at 80 MHz, therefore:
+    // (80 + 30 - 1) / 30 = 3 safe wait states
 
-    // Flash can run at 30 MHz, processor 80 MHz
+    CHECONbits.PFMWS
+        = (SYSCLK_FREQUENCY + FLASH_FREQUENCY - 1) / FLASH_FREQUENCY;
 
-    CHECONbits.PFMWS = 3;
+    test_all_functions_for_the_current_configuration ();
 
-    test_all_functions ();
-
-    printf ("******************************************************************************\n");
-    printf ("*                                                                            *\n");
-    printf ("*       Prefetch enabled, cache disabled                                     *\n");
-    printf ("*                                                                            *\n");
-    printf ("******************************************************************************\n");
+    printf ("************************************************************\n"
+            "*                                                          *\n"
+            "*       Enable prefetch                                    *\n"
+            "*                                                          *\n"
+            "************************************************************\n");
 
     CHECONbits.PREFEN = 3;
 
-    test_all_functions ();
+    test_all_functions_for_the_current_configuration ();
 
-    printf ("******************************************************************************\n");
-    printf ("*                                                                            *\n");
-    printf ("*       Prefetch disabled, cache enabled                                     *\n");
-    printf ("*                                                                            *\n");
-    printf ("******************************************************************************\n");
-
-    CHECONbits.PREFEN = 0;
+    printf ("************************************************************\n"
+            "*                                                          *\n"
+            "*       Enable cache                                       *\n"
+            "*                                                          *\n"
+            "************************************************************\n");
 
     if (alternative_way)
     {
@@ -292,44 +352,34 @@ void main ()
         _mtc0 (_CP0_CONFIG, _CP0_CONFIG_SELECT, config);
     }
 
-    test_all_functions ();
+    test_all_functions_for_the_current_configuration ();
 
-    printf ("******************************************************************************\n");
-    printf ("*                                                                            *\n");
-    printf ("*       Prefetch enabled, cache enabled                                      *\n");
-    printf ("*                                                                            *\n");
-    printf ("******************************************************************************\n");
-
-    CHECONbits.PREFEN = 3;
-
-    test_all_functions ();
-
-    printf ("******************************************************************************\n");
-    printf ("*                                                                            *\n");
-    printf ("*       Enable data caching                                                  *\n");
-    printf ("*                                                                            *\n");
-    printf ("******************************************************************************\n");
+    printf ("************************************************************\n"
+            "*                                                          *\n"
+            "*       Enable data caching                                *\n"
+            "*                                                          *\n"
+            "************************************************************\n");
 
     CHECONbits.DCSZ = 3;  // Enable data caching with a size of 4 Lines
 
-    test_all_functions ();
+    test_all_functions_for_the_current_configuration ();
 
-    printf ("******************************************************************************\n");
-    printf ("*                                                                            *\n");
-    printf ("*       Set zero state data RAM access                                       *\n");
-    printf ("*                                                                            *\n");
-    printf ("******************************************************************************\n");
+    printf ("************************************************************\n"
+            "*                                                          *\n"
+            "*       Set zero state data RAM access                     *\n"
+            "*                                                          *\n"
+            "************************************************************\n");
 
     if (alternative_way)
         mBMXDisableDRMWaitState ();
     else
         BMXCONbits.BMXWSDRM = 0;
 
-    test_all_functions ();
+    test_all_functions_for_the_current_configuration ();
 
-    printf ("******************************************************************************\n");
-    printf ("******************************************************************************\n");
-    printf ("******************************************************************************\n");
+    printf ("************************************************************\n"
+            "************************************************************\n"
+            "************************************************************\n");
 
     for (;;);
 }
