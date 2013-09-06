@@ -6,7 +6,7 @@
 
 #include "types.h"
 
-void uart_init           (uint peripheral_bus_frequency, uint baud);
+void uart_init           (uint baud);
 
 char uart_get_char       (void);
 
