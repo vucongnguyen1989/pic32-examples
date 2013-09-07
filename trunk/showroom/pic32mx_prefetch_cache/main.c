@@ -301,10 +301,10 @@ void test_one_function_for_the_current_configuration
     printf ("%-49.49s %10u\n",
         function_name, double_clock_cycles);
 
-    prefetch_cache_report (true);
+    // prefetch_cache_report (true);
 
-    printf ("\nFunction dump:\n");
-    dump_memory (function);
+    // printf ("\nFunction dump:\n");
+    // dump_memory (function);
 
     if (configuration_number >= n_configurations)
         printf ("\n!!! configuration_number >= n_configurations !!!\n");
